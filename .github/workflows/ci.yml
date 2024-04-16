@@ -27,6 +27,7 @@ jobs:
 
       - name: Install dependency
         id: install_dependency
-        run: yarn install 2> >(tee log_${{ github.run_id }}.txt) ; \
-          if test ${PIPESTATUS[0]} -eq 0; then
-          echo "yarn install failed." ; exit 1;
+        run:
+          yarn install 2> >(tee log_${{ github.run_id }}.txt)
+          # if test ${PIPESTATUS[0]} -eq 0; then
+          # echo "yarn install failed." ; exit 1;
