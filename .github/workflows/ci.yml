@@ -1,0 +1,37 @@
+# ! ci github actions 입니다 .
+
+name: ci
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  changes:
+    if: github.event.pull_request.state != 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: git_checkout
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        id: setup_node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: yarn
+
+      - name: Install dependency
+        id: install_dependency
+        run:
+          yarn install 2> >(tee log_${{ github.run_id }}.txt)
+          # if test ${PIPESTATUS[0]} -eq 0; then
+          # echo "yarn install failed." ; exit 1;
+
+      - name: Run Build
+        id: run_build
+        run: yarn build 2> >(tee log_${{ github.run_id }}.txt)
