@@ -1,0 +1,52 @@
+name: versioning
+
+inputs:
+  segment:
+    required: true
+  previous:
+    required: true
+  description:
+    required: true
+
+outputs:
+  new_version:
+    value: ${{ steps.versioning.outputs.new_version }}
+
+runs:
+  using: composite
+  steps:
+    - id: commit-info
+      shell: bash
+      run: |
+        echo "commit_id=$(echo `git log -n 1 --pretty=format:%H` | cut -c -12)" >> $GITHUB_OUTPUT
+        echo "username=$(echo `git log -n 1 --pretty=format:%an`)" >> $GITHUB_OUTPUT
+        echo "email=$(echo `git log -n 1 --pretty=format:%ae`)" >> $GITHUB_OUTPUT
+
+    - id: versioning
+      shell: bash
+      run: |
+        version=$(echo ${{ inputs.previous }} | cut -d 'v' -f2)
+        major=$(echo $version | cut -d '.' -f1 )
+        minor=$(echo $version | cut -d '.' -f2 )
+        patch=$(echo $version | cut -d '.' -f3 )
+
+        if [[ ${{ inputs.segment }} == 'minor' ]]
+        then
+          _new_version=$(echo v$major.$((minor+1)).0)
+        elif [[ ${{ inputs.segment }} == 'patch' ]]
+        then
+          _new_version=$(echo v$major.$minor.$((patch+1)))
+        else
+          exit 1
+        fi
+
+        echo "new version: $_new_version"
+        echo "new_version=$_new_version" >> $GITHUB_OUTPUT
+
+    - id: push-tags
+      shell: bash
+      run: |
+        git config --global user.name "${{ steps.commit-info.outputs.username }}"
+        git config --global user.email ${{ steps.commit-info.outputs.email }}
+        git tag -a ${{ steps.versioning.outputs.new_version }} -m "${{inputs.description}}"
+        git push origin --tags
