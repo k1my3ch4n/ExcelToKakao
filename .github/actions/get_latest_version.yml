@@ -1,0 +1,19 @@
+name: get_latest_version
+
+outputs:
+  version:
+    value: ${{ steps.get-tag.outputs.result }}
+
+runs:
+  using: composite
+  steps:
+    - id: get-tag
+      shell: bash
+      run: |
+        git fetch --all --tags
+
+        tag=$(echo `git tag -l --sort -v:refname "v*" --merged HEAD | head -n 1` | cut -d/ -f2)
+
+        echo latest tag: $tag
+
+        echo "result=$tag" >> $GITHUB_OUTPUT
