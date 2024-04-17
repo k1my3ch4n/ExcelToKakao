@@ -1,0 +1,26 @@
+name: auto_versioning
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  changes:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - id: get-tags
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - id: get-latest-version
+        uses: ./.github/actions/get_latest_version
+
+      - id: versioning
+        uses: ./.github/actions/versioning
+        with:
+          segment: patch
+          previous: ${{ steps.get-latest-version.outputs.version }}
+          description: ${{ github.event.pull_request.title }}
