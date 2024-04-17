@@ -24,3 +24,9 @@ jobs:
           segment: patch
           previous: ${{ steps.get-latest-version.outputs.version }}
           description: ${{ github.event.pull_request.title }}
+
+      - id: notion-versioning
+        uses: ./.github/actions/notion_versioning
+        with:
+          version: ${{ steps.get-latest-version.outputs.new_version }}
+          api_key: ${{ secrets.NOTIONAPIKEY }}
