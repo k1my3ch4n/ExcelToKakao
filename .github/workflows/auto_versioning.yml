@@ -28,5 +28,5 @@ jobs:
       - id: notion-versioning
         uses: ./.github/actions/notion_versioning
         with:
-          version: ${{ steps.get-latest-version.outputs.version }}
+          version: ${{ steps.versioning.outputs.new_version }}
           api_key: ${{ secrets.NOTIONAPIKEY }}
