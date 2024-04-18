@@ -24,7 +24,7 @@ runs:
           -H "Notion-Version: 2022-06-28" \
           --data '{
             "parent": {
-              "database_id": "16d02394dc4245ec969b1536dc88439c?"
+              "database_id": "de36c46dd41b4a8e9a7b02bbad6784eb"
             },
             "properties": {
               "배포 상태": {
