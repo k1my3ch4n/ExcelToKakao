@@ -1,5 +1,3 @@
-# Portfolio
+# kakao api 를 이용한 카카오톡 메시지 전송 ( + 엑셀 )
 
-- 이 레포에서 다음 프로젝트가 진행될 예정입니다.
-- 약 3주간 진행 예정입니다.
-- 주제는 아직 정해지지 못했지만 , open api 들을 찾는 중입니다 .
+[참고 링크](https://k1my3ch4ns.notion.site/5338f03377b34ffb8c9eca9c6d4fcfa4?pvs=25) 작성중
