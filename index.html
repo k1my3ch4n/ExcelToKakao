@@ -14,11 +14,7 @@
       crossorigin="anonymous"
     ></script>
     <script type="module">
-      import { JS_KEY } from './env-module.js';
-
-      Kakao.init(JS_KEY);
-
-      Kakao.isInitialized();
+      Kakao.init('%VITE_JAVASCRIPT_KEY%');
 
       console.log(Kakao.isInitialized());
     </script>
