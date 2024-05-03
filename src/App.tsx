@@ -1,14 +1,14 @@
 import styles from './app.module.scss';
 
 const App = () => {
-  console.log(Kakao);
+  const kakao = (window as any).Kakao;
 
   const handleClick = async () => {
-    Kakao.Share.sendDefault({
+    kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title: '오늘의 디저트',
-        description: '아메리카노, 빵, 케익',
+        title: '타이틀',
+        description: 'description',
         imageUrl:
           'https://mud-kage.kakao.com/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg',
         link: {
@@ -28,22 +28,6 @@ const App = () => {
           {
             item: 'Cake1',
             itemOp: '1000원',
-          },
-          {
-            item: 'Cake2',
-            itemOp: '2000원',
-          },
-          {
-            item: 'Cake3',
-            itemOp: '3000원',
-          },
-          {
-            item: 'Cake4',
-            itemOp: '4000원',
-          },
-          {
-            item: 'Cake5',
-            itemOp: '5000원',
           },
         ],
         sum: '총 결제금액',
