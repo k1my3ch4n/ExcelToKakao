@@ -98,6 +98,23 @@ const App = () => {
     }
 
     if (objectType === 'commerce') {
+      kakao.Share.sendDefault({
+        objectType: 'commerce',
+        content: {
+          title: record['content_title'],
+          description: record['content_description'],
+          imageUrl: record['content_image_url'],
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+        commerce: {
+          productName: record['product_name'],
+          regularPrice: record['regular_price'],
+        },
+      });
+
       return;
     }
 
