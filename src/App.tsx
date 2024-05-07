@@ -78,6 +78,48 @@ const App = () => {
 
       return;
     }
+
+    if (objectType === 'location') {
+      kakao.Share.sendDefault({
+        objectType: 'location',
+        address: record['address'],
+        content: {
+          title: record['content_title'],
+          description: record['content_description'],
+          imageUrl: record['content_image_url'],
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+      });
+
+      return;
+    }
+
+    if (objectType === 'commerce') {
+      return;
+    }
+
+    // todo : calendar id 해결해야함
+    if (objectType === 'calendar') {
+      kakao.Share.sendDefault({
+        objectType: 'calendar',
+        idType: record['IdType'],
+        id: record['id'],
+        content: {
+          title: record['content_title'],
+          description: record['content_description'],
+          imageUrl: record['content_image_url'],
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['conten_mobile_web_url'],
+          },
+        },
+      });
+
+      return;
+    }
   };
 
   const handleFileChange = async (
