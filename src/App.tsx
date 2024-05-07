@@ -45,6 +45,39 @@ const App = () => {
 
       return;
     }
+
+    if (objectType === 'list') {
+      kakao.Share.sendDefault({
+        objectType: 'list',
+        headerTitle: record['header_title'],
+        headerLink: {
+          mobileWebUrl: record['header_web_url'],
+          webUrl: record['header_mobile_web_url'],
+        },
+        contents: [
+          {
+            title: record['content_title1'],
+            description: record['content_description1'],
+            imageUrl: record['content_image_url1'],
+            link: {
+              mobileWebUrl: record['content_web_url1'],
+              webUrl: record['content_mobile_web_url1'],
+            },
+          },
+          {
+            title: record['content_title2'],
+            description: record['content_description2'],
+            imageUrl: record['content_image_url2'],
+            link: {
+              mobileWebUrl: record['content_web_url2'],
+              webUrl: record['content_mobile_web_url2'],
+            },
+          },
+        ],
+      });
+
+      return;
+    }
   };
 
   const handleFileChange = async (
