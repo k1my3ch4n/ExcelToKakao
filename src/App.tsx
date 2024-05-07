@@ -1,65 +1,58 @@
+import { useState } from 'react';
 import styles from './app.module.scss';
+import { ExcelRecord, excelFileToRecords } from '@utils/excelUtil';
+
+const kakao = (window as any).Kakao;
 
 const App = () => {
-  const kakao = (window as any).Kakao;
+  const [file, setFile] = useState<File | null>(null);
+  const [record, setRecord] = useState<ExcelRecord | null>(null);
 
   const handleClick = async () => {
+    if (!record) {
+      return;
+    }
+
     kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title: '타이틀',
-        description: 'description',
-        imageUrl:
-          'https://mud-kage.kakao.com/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg',
+        title: record['content_title'],
+        description: record['content_description'],
+        imageUrl: record['content_image_url'],
         link: {
-          mobileWebUrl: 'https://developers.kakao.com',
-          webUrl: 'https://developers.kakao.com',
+          mobileWebUrl: record['content_web_url'],
+          webUrl: record['conten_mobile_web_url'],
         },
       },
-      itemContent: {
-        profileText: 'Kakao',
-        profileImageUrl:
-          'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png',
-        titleImageUrl:
-          'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png',
-        titleImageText: 'Cheese cake',
-        titleImageCategory: 'Cake',
-        items: [
-          {
-            item: 'Cake1',
-            itemOp: '1000원',
-          },
-        ],
-        sum: '총 결제금액',
-        sumOp: '15000원',
-      },
-      social: {
-        likeCount: 10,
-        commentCount: 20,
-        sharedCount: 30,
-      },
-      buttons: [
-        {
-          title: '웹으로 이동',
-          link: {
-            mobileWebUrl: 'https://developers.kakao.com',
-            webUrl: 'https://developers.kakao.com',
-          },
-        },
-        {
-          title: '앱으로 이동',
-          link: {
-            mobileWebUrl: 'https://developers.kakao.com',
-            webUrl: 'https://developers.kakao.com',
-          },
-        },
-      ],
     });
   };
 
+  const handleFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement> & {
+      target: EventTarget & { files: FileList };
+    },
+  ) => {
+    const file = e.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    const record = await excelFileToRecords(file);
+
+    console.log(record['objectType']);
+
+    setFile(file);
+    setRecord(record);
+  };
+
+  console.log('record : ', record);
+
   return (
     <div className={styles.wrapper}>
-      <button onClick={handleClick}>버튼</button>
+      <span>엑셀 파일 첨부</span>
+      <input id="file" type="file" onChange={handleFileChange} accept=".xlsx, .xls, .csv" />
+      <button onClick={handleClick}>메세지 보내기</button>
     </div>
   );
 };
