@@ -4,27 +4,47 @@ import { ExcelRecord, excelFileToRecords } from '@utils/excelUtil';
 
 const kakao = (window as any).Kakao;
 
+type MessageType = 'feed' | 'list' | 'location' | 'commerce' | 'text' | 'calendar';
+
 const App = () => {
   const [file, setFile] = useState<File | null>(null);
   const [record, setRecord] = useState<ExcelRecord | null>(null);
+  const [objectType, setObjectType] = useState<MessageType | null>(null);
 
   const handleClick = async () => {
     if (!record) {
       return;
     }
 
-    kakao.Share.sendDefault({
-      objectType: 'feed',
-      content: {
-        title: record['content_title'],
-        description: record['content_description'],
-        imageUrl: record['content_image_url'],
+    if (objectType === 'feed') {
+      kakao.Share.sendDefault({
+        objectType: 'feed',
+        content: {
+          title: record['content_title'],
+          description: record['content_description'],
+          imageUrl: record['content_image_url'],
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['conten_mobile_web_url'],
+          },
+        },
+      });
+
+      return;
+    }
+
+    if (objectType === 'text') {
+      kakao.Share.sendDefault({
+        objectType: 'text',
+        text: record['content'],
         link: {
           mobileWebUrl: record['content_web_url'],
           webUrl: record['conten_mobile_web_url'],
         },
-      },
-    });
+      });
+
+      return;
+    }
   };
 
   const handleFileChange = async (
@@ -40,13 +60,12 @@ const App = () => {
 
     const record = await excelFileToRecords(file);
 
-    console.log(record['objectType']);
-
     setFile(file);
     setRecord(record);
+    setObjectType(record['objectType'] as MessageType);
   };
 
-  console.log('record : ', record);
+  console.log(objectType);
 
   return (
     <div className={styles.wrapper}>
