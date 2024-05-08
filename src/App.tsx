@@ -1,142 +1,22 @@
 import { useState } from 'react';
 import styles from './app.module.scss';
-import { ExcelRecord, excelFileToRecords } from '@utils/excelUtil';
+import { MessageType, ExcelRecord, excelFileToRecords, recordsToSendData } from '@utils/excelUtil';
 
 const kakao = (window as any).Kakao;
 
-type MessageType = 'feed' | 'list' | 'location' | 'commerce' | 'text' | 'calendar';
-
 const App = () => {
-  const [file, setFile] = useState<File | null>(null);
-  const [record, setRecord] = useState<ExcelRecord | null>(null);
+  // const [file, setFile] = useState<File | null>(null);
+  // const [record, setRecord] = useState<ExcelRecord | null>(null);
+
   const [objectType, setObjectType] = useState<MessageType | null>(null);
+  const [sendData, setSendData] = useState<any>(null);
 
   const handleClick = async () => {
-    if (!record) {
+    if (!sendData) {
       return;
     }
 
-    if (objectType === 'feed') {
-      kakao.Share.sendDefault({
-        objectType: 'feed',
-        content: {
-          title: record['content_title'],
-          description: record['content_description'],
-          imageUrl: record['content_image_url'],
-          link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['conten_mobile_web_url'],
-          },
-        },
-      });
-
-      return;
-    }
-
-    if (objectType === 'text') {
-      kakao.Share.sendDefault({
-        objectType: 'text',
-        text: record['content'],
-        link: {
-          mobileWebUrl: record['content_web_url'],
-          webUrl: record['conten_mobile_web_url'],
-        },
-      });
-
-      return;
-    }
-
-    if (objectType === 'list') {
-      kakao.Share.sendDefault({
-        objectType: 'list',
-        headerTitle: record['header_title'],
-        headerLink: {
-          mobileWebUrl: record['header_web_url'],
-          webUrl: record['header_mobile_web_url'],
-        },
-        contents: [
-          {
-            title: record['content_title1'],
-            description: record['content_description1'],
-            imageUrl: record['content_image_url1'],
-            link: {
-              mobileWebUrl: record['content_web_url1'],
-              webUrl: record['content_mobile_web_url1'],
-            },
-          },
-          {
-            title: record['content_title2'],
-            description: record['content_description2'],
-            imageUrl: record['content_image_url2'],
-            link: {
-              mobileWebUrl: record['content_web_url2'],
-              webUrl: record['content_mobile_web_url2'],
-            },
-          },
-        ],
-      });
-
-      return;
-    }
-
-    if (objectType === 'location') {
-      kakao.Share.sendDefault({
-        objectType: 'location',
-        address: record['address'],
-        content: {
-          title: record['content_title'],
-          description: record['content_description'],
-          imageUrl: record['content_image_url'],
-          link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
-          },
-        },
-      });
-
-      return;
-    }
-
-    if (objectType === 'commerce') {
-      kakao.Share.sendDefault({
-        objectType: 'commerce',
-        content: {
-          title: record['content_title'],
-          description: record['content_description'],
-          imageUrl: record['content_image_url'],
-          link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
-          },
-        },
-        commerce: {
-          productName: record['product_name'],
-          regularPrice: record['regular_price'],
-        },
-      });
-
-      return;
-    }
-
-    // todo : calendar id 해결해야함
-    if (objectType === 'calendar') {
-      kakao.Share.sendDefault({
-        objectType: 'calendar',
-        idType: record['IdType'],
-        id: record['id'],
-        content: {
-          title: record['content_title'],
-          description: record['content_description'],
-          imageUrl: record['content_image_url'],
-          link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['conten_mobile_web_url'],
-          },
-        },
-      });
-
-      return;
-    }
+    kakao.Share.sendDefault(sendData);
   };
 
   const handleFileChange = async (
@@ -151,13 +31,16 @@ const App = () => {
     }
 
     const record = await excelFileToRecords(file);
+    const objectType = record['objectType'] as MessageType;
 
-    setFile(file);
-    setRecord(record);
-    setObjectType(record['objectType'] as MessageType);
+    const sendData = recordsToSendData({ objectType, record });
+
+    setObjectType(objectType);
+    setSendData(sendData);
+
+    // setFile(file);
+    // setRecord(record);
   };
-
-  console.log(objectType);
 
   return (
     <div className={styles.wrapper}>
