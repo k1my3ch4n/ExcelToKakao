@@ -1,0 +1,19 @@
+.wrapper {
+  width: 100%;
+  height: 100%;
+  margin: 20px;
+
+  background-color: white;
+
+  .image {
+    height: fit-content;
+
+    & > img {
+      width: 500px;
+    }
+  }
+
+  .detail {
+    padding: 10px;
+  }
+}
