@@ -17,7 +17,9 @@ const Feed = ({ record }: { record: ExcelRecord }) => {
       </div>
       <div className={styles.detail}>
         <div className={styles.title}>{title ?? 'title이 없습니다.'}</div>
+        {/* itemContent 추가해야함 */}
         <div className={styles.description}>{description ?? 'description이 없습니다.'}</div>
+        {/* social 추가해야함 */}
         <div className={styles.button}>자세히 보기</div>
       </div>
     </div>
