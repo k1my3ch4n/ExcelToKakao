@@ -3,6 +3,7 @@ import styles from './app.module.scss';
 import { MessageType, ExcelRecord, excelFileToRecords, recordsToSendData } from '@utils/excelUtil';
 
 import Feed from './Feed';
+import Text from './Text';
 
 const kakao = (window as any).Kakao;
 
@@ -49,7 +50,10 @@ const App = () => {
       <span>엑셀 파일 첨부</span>
       <input id="file" type="file" onChange={handleFileChange} accept=".xlsx, .xls, .csv" />
       {record && (
-        <div className={styles.content}>{objectType === 'feed' && <Feed record={record} />}</div>
+        <div className={styles.content}>
+          {objectType === 'feed' && <Feed record={record} />}
+          {objectType === 'text' && <Text />}
+        </div>
       )}
 
       <button onClick={handleClick}>메세지 보내기</button>
