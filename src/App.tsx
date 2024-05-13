@@ -4,12 +4,12 @@ import { MessageType, ExcelRecord, excelFileToRecords, recordsToSendData } from 
 
 import Feed from './Feed';
 import Text from './Text';
-import { Hamburger } from '@images/index';
+import { Excel, Hamburger } from '@images/index';
 
 const kakao = (window as any).Kakao;
 
 const App = () => {
-  // const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(null);
 
   const [record, setRecord] = useState<ExcelRecord | null>(null);
   const [objectType, setObjectType] = useState<MessageType | null>(null);
@@ -43,23 +43,24 @@ const App = () => {
     setSendData(sendData);
     setRecord(record);
 
-    // setFile(file);
+    setFile(file);
   };
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.headline}>
         <div className={styles.lhs}>
-          <div className={styles.logo}>img</div>
+          <div className={styles.logo}>
+            <Excel />
+          </div>
           <div className={styles.title}>ETK ( Excel To Kakao )</div>
         </div>
+
         <div className={styles.rhs}>
           <Hamburger />
         </div>
       </div>
 
-      {/* <span>엑셀 파일 첨부</span>
-      <input id="file" type="file" onChange={handleFileChange} accept=".xlsx, .xls, .csv" />
       {record && (
         <div className={styles.content}>
           {objectType === 'feed' && <Feed record={record} />}
@@ -67,7 +68,16 @@ const App = () => {
         </div>
       )}
 
-      <button onClick={handleClick}>메세지 보내기</button> */}
+      <div className={styles.footer}>
+        <div className={styles.label}>{file ? file.name : '파일을 선택해 주세요'}</div>
+        <input id="file" type="file" onChange={handleFileChange} accept=".xlsx, .xls, .csv" />
+
+        {file ? (
+          <button onClick={handleClick}>전송</button>
+        ) : (
+          <label htmlFor="file">파일 선택</label>
+        )}
+      </div>
     </div>
   );
 };

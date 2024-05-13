@@ -10,11 +10,19 @@
   margin: 20px;
 
   width: 70%;
+  min-width: 400px;
+  min-height: 600px;
+
+  background-color: lightblue;
+  border: 1px solid lightgray;
+  border-radius: 8px;
 
   .headline {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    padding: 10px;
 
     .lhs {
       display: flex;
@@ -24,7 +32,8 @@
         width: 30px;
         height: 30px;
 
-        border: 1px solid black;
+        border: 1px solid lightgray;
+        background-color: lightgray;
         border-radius: 8px;
       }
 
@@ -37,6 +46,47 @@
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: auto;
+
+    background-color: white;
+    border-radius: 0 0 8px 8px;
+
+    .label {
+      margin: 10px;
+      width: 100%;
+    }
+
+    input[type='file'] {
+      position: absolute;
+      width: 0;
+      height: 0;
+      padding: 0;
+      border: 0;
+      overflow: hidden;
+    }
+
+    label,
+    button {
+      min-width: 70px;
+      padding: 10px 20px;
+      margin: 10px;
+
+      background-color: yellow;
+      border: none;
+      border-radius: 8px;
+
+      &:hover {
+        background-color: yellowgreen;
+        cursor: pointer;
+      }
     }
   }
 }
