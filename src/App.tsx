@@ -4,6 +4,7 @@ import { MessageType, ExcelRecord, excelFileToRecords, recordsToSendData } from 
 
 import Feed from './Feed';
 import Text from './Text';
+import { Hamburger } from '@images/index';
 
 const kakao = (window as any).Kakao;
 
@@ -47,7 +48,17 @@ const App = () => {
 
   return (
     <div className={styles.wrapper}>
-      <span>엑셀 파일 첨부</span>
+      <div className={styles.headline}>
+        <div className={styles.lhs}>
+          <div className={styles.logo}>img</div>
+          <div className={styles.title}>ETK ( Excel To Kakao )</div>
+        </div>
+        <div className={styles.rhs}>
+          <Hamburger />
+        </div>
+      </div>
+
+      {/* <span>엑셀 파일 첨부</span>
       <input id="file" type="file" onChange={handleFileChange} accept=".xlsx, .xls, .csv" />
       {record && (
         <div className={styles.content}>
@@ -56,7 +67,7 @@ const App = () => {
         </div>
       )}
 
-      <button onClick={handleClick}>메세지 보내기</button>
+      <button onClick={handleClick}>메세지 보내기</button> */}
     </div>
   );
 };
