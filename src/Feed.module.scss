@@ -1,0 +1,44 @@
+.wrapper {
+  width: 100%;
+  height: 100%;
+  margin: 20px;
+
+  background-color: white;
+
+  .image {
+    height: fit-content;
+
+    & > img {
+      width: 500px;
+    }
+  }
+
+  .detail {
+    padding: 10px;
+
+    div + div {
+      margin-top: 10px;
+    }
+
+    .title {
+      font-weight: 600;
+    }
+
+    .description {
+      color: lightgray;
+    }
+
+    .button {
+      border: 1px solid gray;
+      border-radius: 5px;
+
+      background-color: lightgray;
+
+      padding: 10px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
