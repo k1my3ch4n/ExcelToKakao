@@ -4,7 +4,7 @@ import { MessageType, ExcelRecord, excelFileToRecords, recordsToSendData } from 
 
 import Feed from './Feed';
 import Text from './Text';
-import { Excel, Hamburger } from '@images/index';
+import { Close, Excel, Hamburger } from '@images/index';
 
 const kakao = (window as any).Kakao;
 
@@ -46,6 +46,13 @@ const App = () => {
     setFile(file);
   };
 
+  const handleResetFile = () => {
+    setObjectType(null);
+    setSendData(null);
+    setRecord(null);
+    setFile(null);
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.headline}>
@@ -57,7 +64,9 @@ const App = () => {
         </div>
 
         <div className={styles.rhs}>
-          <Hamburger />
+          <button>
+            <Hamburger />
+          </button>
         </div>
       </div>
 
@@ -73,7 +82,12 @@ const App = () => {
         <input id="file" type="file" onChange={handleFileChange} accept=".xlsx, .xls, .csv" />
 
         {file ? (
-          <button onClick={handleClick}>전송</button>
+          <>
+            <button onClick={handleResetFile}>
+              <Close />
+            </button>
+            <button onClick={handleClick}>전송</button>
+          </>
         ) : (
           <label htmlFor="file">파일 선택</label>
         )}
