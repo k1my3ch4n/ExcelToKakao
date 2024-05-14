@@ -74,7 +74,7 @@ const Home = () => {
       {record && (
         <div className={styles.content}>
           {objectType === 'feed' && <Feed record={record} />}
-          {objectType === 'text' && <Text />}
+          {objectType === 'text' && <Text record={record} />}
         </div>
       )}
 
