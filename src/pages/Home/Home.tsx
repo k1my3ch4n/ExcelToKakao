@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from './app.module.scss';
+import styles from './Home.module.scss';
 import { MessageType, ExcelRecord, excelFileToRecords, recordsToSendData } from '@utils/excelUtil';
 
 import Feed from '@components/Feed';
@@ -8,7 +8,7 @@ import { Close, Excel, Hamburger } from '@images/index';
 
 const kakao = (window as any).Kakao;
 
-const App = () => {
+const Home = () => {
   const [file, setFile] = useState<File | null>(null);
 
   const [record, setRecord] = useState<ExcelRecord | null>(null);
@@ -97,4 +97,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Home;
