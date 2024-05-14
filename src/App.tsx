@@ -2,8 +2,8 @@ import { useState } from 'react';
 import styles from './app.module.scss';
 import { MessageType, ExcelRecord, excelFileToRecords, recordsToSendData } from '@utils/excelUtil';
 
-import Feed from './Feed';
-import Text from './Text';
+import Feed from '@components/Feed';
+import Text from '@components/Text';
 import { Close, Excel, Hamburger } from '@images/index';
 
 const kakao = (window as any).Kakao;
