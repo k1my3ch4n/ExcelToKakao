@@ -5,6 +5,7 @@ import { MessageType, ExcelRecord, excelFileToRecords, recordsToSendData } from 
 import Feed from '@components/Feed';
 import Text from '@components/Text';
 import { Close, Excel, Hamburger } from '@images/index';
+import List from '@components/List';
 
 const kakao = (window as any).Kakao;
 
@@ -75,6 +76,7 @@ const Home = () => {
         <div className={styles.content}>
           {objectType === 'feed' && <Feed record={record} />}
           {objectType === 'text' && <Text record={record} />}
+          {objectType === 'list' && <List record={record} />}
         </div>
       )}
 
