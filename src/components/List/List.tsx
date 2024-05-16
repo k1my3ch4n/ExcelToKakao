@@ -2,6 +2,10 @@ import styles from './List.module.scss';
 import { ExcelRecord } from '@utils/excelUtil';
 
 const List = ({ record }: { record: ExcelRecord }) => {
+  if (!record) {
+    return null;
+  }
+
   const headerTitle = record['header_title'] as string;
   const contentTitle1 = record['content_title1'] as string;
   const contentDescription1 = record['content_description1'] as string;

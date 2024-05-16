@@ -6,6 +6,8 @@ import Feed from '@components/Feed';
 import Text from '@components/Text';
 import { Close, Excel, Hamburger } from '@images/index';
 import List from '@components/List';
+import Commerce from '@components/Commerce';
+import Location from '@components/Location';
 
 const kakao = (window as any).Kakao;
 
@@ -77,6 +79,8 @@ const Home = () => {
           {objectType === 'feed' && <Feed record={record} />}
           {objectType === 'text' && <Text record={record} />}
           {objectType === 'list' && <List record={record} />}
+          {objectType === 'commerce' && <Commerce record={record} />}
+          {objectType === 'location' && <Location record={record} />}
         </div>
       )}
 
