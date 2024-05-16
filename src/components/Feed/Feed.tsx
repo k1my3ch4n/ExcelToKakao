@@ -1,5 +1,5 @@
 import styles from './Feed.module.scss';
-import { ExcelRecord } from './utils/excelUtil';
+import { ExcelRecord } from '@utils/excelUtil';
 
 const Feed = ({ record }: { record: ExcelRecord }) => {
   if (!record) {
