@@ -8,7 +8,8 @@ import { Close, Excel, Hamburger } from '@images/index';
 import List from '@components/List';
 import Commerce from '@components/Commerce';
 import Location from '@components/Location';
-import Button from '@src/components/Button';
+import Button from '@components/Button';
+import Header from './Header';
 
 const kakao = (window as any).Kakao;
 
@@ -68,20 +69,7 @@ const Home = () => {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.headline}>
-        <div className={styles.lhs}>
-          <div className={styles.logo}>
-            <Excel />
-          </div>
-          <div className={styles.title}>ETK ( Excel To Kakao )</div>
-        </div>
-
-        <div className={styles.rhs}>
-          <Button size="m" color="none" hasIcon>
-            <Hamburger />
-          </Button>
-        </div>
-      </div>
+      <Header />
 
       {record && (
         <div className={styles.content}>
