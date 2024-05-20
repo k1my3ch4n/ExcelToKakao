@@ -276,9 +276,32 @@ export const recordsToSendData = ({
         },
       },
       commerce: {
-        productName: record['product_name'],
-        regularPrice: record['regular_price'],
+        productName: record['product_name'], // 필수 아님
+        regularPrice: record['regular_price'], // 필수
+        discountPrice: 'discountPrice', // 필수 아님
+        discountRate: 'discountRate', // 필수 아님
+        fixedDiscountPrice: 'fixedDiscountPrice', // 필수 아님
+        currency_unit: 'currency_unit', // 필수 아님
+        currencyUnitPosition: 1, // 필수 아님
       },
+      button_title: 'buttonTitle', // 버튼 이름 변경
+      buttons: [
+        // 버튼이 여러개인 경우 ( 최대 2개 )
+        {
+          title: 'buttonTitle1',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+        {
+          title: 'buttonTitle2',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+      ],
     };
   }
 
