@@ -1,0 +1,35 @@
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: none;
+  border-radius: 8px;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+}
+
+.l {
+  height: 40px;
+  padding: 10px 20px;
+}
+
+.m {
+  height: 30px;
+  padding: 5px 10px;
+}
+
+.yellow {
+  background-color: #fee500;
+
+  &:hover {
+    background-color: #fada0a;
+  }
+}
+
+.hasIcon {
+  background-color: transparent;
+  padding: 4px;
+}

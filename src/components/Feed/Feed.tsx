@@ -1,3 +1,4 @@
+import Wrapper from '../Wrapper';
 import styles from './Feed.module.scss';
 import { ExcelRecord } from '@utils/excelUtil';
 
@@ -11,7 +12,7 @@ const Feed = ({ record }: { record: ExcelRecord }) => {
   const description = record['content_description'] as string;
 
   return (
-    <div className={styles.wrapper}>
+    <Wrapper>
       <div className={styles.image}>
         {imageUrl ? <img src={imageUrl}></img> : '이미지가 없습니다.'}
       </div>
@@ -22,7 +23,7 @@ const Feed = ({ record }: { record: ExcelRecord }) => {
         {/* social 추가해야함 */}
         <div className={styles.button}>자세히 보기</div>
       </div>
-    </div>
+    </Wrapper>
   );
 };
 

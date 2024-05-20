@@ -70,16 +70,66 @@ export const recordsToSendData = ({
 
   if (objectType === 'feed') {
     sendData = {
-      objectType,
+      objectType, // 필수
       content: {
-        title: record['content_title'],
-        description: record['content_description'],
-        imageUrl: record['content_image_url'],
+        title: record['content_title'], // 필수 아님 . a 중 1개 필요
+        description: record['content_description'], // 필수 아님 . a 중 1개 필요
+        imageUrl: record['content_image_url'], // 필수 아님 . a 중 1개 필요
         link: {
-          mobileWebUrl: record['content_web_url'],
-          webUrl: record['content_mobile_web_url'],
+          mobileWebUrl: record['content_web_url'], // 필수 아님 . b 중 1개 필요
+          webUrl: record['content_mobile_web_url'], // 필수 아님 . b 중 1개 필요
         },
       },
+      itemContent: {
+        // 필수 아님
+        profileText: record['content_title'],
+        profileImageUrl: record['content_image_url'],
+        titleImageText: record['content_title'],
+        titleImageUrl: record['content_image_url'],
+        titleImageCategory: record['content_description'],
+        items: [
+          {
+            item: record['content_title'],
+            itemOp: '20000',
+          },
+          {
+            item: record['content_title'],
+            itemOp: '20000',
+          },
+          {
+            item: record['content_title'],
+            itemOp: '20000',
+          },
+        ],
+        sum: '20000',
+        sumOp: '20000',
+      },
+      social: {
+        // 필수 아님 , 이 중 3개만 사용 ( 우선순위는 위부터 아래 순 )
+        likeCount: 999,
+        commentCount: 999,
+        sharedCount: 999,
+        viewCount: 999,
+        subscriberCount: 999,
+      },
+      button_title: 'buttonTitle', // 버튼 이름 변경
+      buttons: [
+        // 버튼이 여러개인 경우 ( 최대 2개 )
+        {
+          title: 'buttonTitle1',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+        {
+          title: 'buttonTitle2',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+      ],
     };
   }
 
@@ -91,6 +141,24 @@ export const recordsToSendData = ({
         mobileWebUrl: record['content_web_url'],
         webUrl: record['content_mobile_web_url'],
       },
+      button_title: 'buttonTitle', // 버튼 이름 변경
+      buttons: [
+        // 버튼이 여러개인 경우 ( 최대 2개 )
+        {
+          title: 'buttonTitle1',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+        {
+          title: 'buttonTitle2',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+      ],
     };
   }
 
@@ -121,6 +189,33 @@ export const recordsToSendData = ({
             webUrl: record['content_mobile_web_url2'],
           },
         },
+        {
+          title: record['content_title3'],
+          description: record['content_description3'],
+          imageUrl: record['content_image_url3'],
+          link: {
+            mobileWebUrl: record['content_web_url3'],
+            webUrl: record['content_mobile_web_url3'],
+          },
+        },
+      ],
+      button_title: 'buttonTitle', // 버튼 이름 변경
+      buttons: [
+        // 버튼이 여러개인 경우 ( 최대 2개 )
+        {
+          title: 'buttonTitle1',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+        {
+          title: 'buttonTitle2',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
       ],
     };
   }
@@ -129,6 +224,7 @@ export const recordsToSendData = ({
     sendData = {
       objectType,
       address: record['address'],
+      addressTitle: 'addressTitle', // 필수 아님 , 지도 뷰 타이틀
       content: {
         title: record['content_title'],
         description: record['content_description'],
@@ -138,6 +234,32 @@ export const recordsToSendData = ({
           webUrl: record['content_mobile_web_url'],
         },
       },
+      social: {
+        // 필수 아님 , 이 중 3개만 사용 ( 우선순위는 위부터 아래 순 )
+        likeCount: 999,
+        commentCount: 999,
+        sharedCount: 999,
+        viewCount: 999,
+        subscriberCount: 999,
+      },
+      button_title: 'buttonTitle', // 버튼 이름 변경
+      buttons: [
+        // 버튼이 여러개인 경우 ( 최대 2개 )
+        {
+          title: 'buttonTitle1',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+        {
+          title: 'buttonTitle2',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+      ],
     };
   }
 
@@ -154,9 +276,32 @@ export const recordsToSendData = ({
         },
       },
       commerce: {
-        productName: record['product_name'],
-        regularPrice: record['regular_price'],
+        productName: record['product_name'], // 필수 아님
+        regularPrice: record['regular_price'], // 필수
+        discountPrice: 'discountPrice', // 필수 아님
+        discountRate: 'discountRate', // 필수 아님
+        fixedDiscountPrice: 'fixedDiscountPrice', // 필수 아님
+        currency_unit: 'currency_unit', // 필수 아님
+        currencyUnitPosition: 1, // 필수 아님
       },
+      button_title: 'buttonTitle', // 버튼 이름 변경
+      buttons: [
+        // 버튼이 여러개인 경우 ( 최대 2개 )
+        {
+          title: 'buttonTitle1',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+        {
+          title: 'buttonTitle2',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+      ],
     };
   }
 

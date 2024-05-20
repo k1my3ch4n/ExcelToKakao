@@ -8,41 +8,9 @@
   min-width: 400px;
   min-height: 600px;
 
-  background-color: lightblue;
-  border: 1px solid lightgray;
+  background-color: #bacee0;
+  border: 1px solid #cccccc;
   border-radius: 8px;
-
-  .headline {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 10px;
-
-    .lhs {
-      display: flex;
-      align-items: center;
-
-      .logo {
-        width: 30px;
-        height: 30px;
-
-        border: 1px solid lightgray;
-        background-color: lightgray;
-        border-radius: 8px;
-      }
-
-      .title {
-        margin-left: 10px;
-      }
-    }
-
-    .lhs {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
 
   .content {
     width: 60%;
@@ -51,46 +19,5 @@
     margin: 0 20px 20px auto;
 
     border-radius: 8px;
-  }
-
-  .footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-top: auto;
-
-    background-color: white;
-    border-radius: 0 0 8px 8px;
-
-    .label {
-      margin: 10px;
-      width: 100%;
-    }
-
-    input[type='file'] {
-      position: absolute;
-      width: 0;
-      height: 0;
-      padding: 0;
-      border: 0;
-      overflow: hidden;
-    }
-
-    label,
-    button {
-      min-width: 70px;
-      padding: 10px 20px;
-      margin: 10px;
-
-      background-color: yellow;
-      border: none;
-      border-radius: 8px;
-
-      &:hover {
-        background-color: yellowgreen;
-        cursor: pointer;
-      }
-    }
   }
 }

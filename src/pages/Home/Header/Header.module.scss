@@ -1,0 +1,25 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 10px;
+
+  .lhs {
+    display: flex;
+    align-items: center;
+
+    .logo {
+      width: 30px;
+      height: 30px;
+
+      background-color: white;
+      border-radius: 8px;
+    }
+
+    .title {
+      margin-left: 10px;
+      font-weight: 600;
+    }
+  }
+}
