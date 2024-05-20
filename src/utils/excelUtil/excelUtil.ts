@@ -114,6 +114,7 @@ export const recordsToSendData = ({
       },
       button_title: 'buttonTitle', // 버튼 이름 변경
       buttons: [
+        // 버튼이 여러개인 경우 ( 최대 2개 )
         {
           title: 'buttonTitle1',
           link: {
@@ -140,6 +141,24 @@ export const recordsToSendData = ({
         mobileWebUrl: record['content_web_url'],
         webUrl: record['content_mobile_web_url'],
       },
+      button_title: 'buttonTitle', // 버튼 이름 변경
+      buttons: [
+        // 버튼이 여러개인 경우 ( 최대 2개 )
+        {
+          title: 'buttonTitle1',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+        {
+          title: 'buttonTitle2',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+      ],
     };
   }
 
