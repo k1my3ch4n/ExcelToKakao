@@ -224,6 +224,7 @@ export const recordsToSendData = ({
     sendData = {
       objectType,
       address: record['address'],
+      addressTitle: 'addressTitle', // 필수 아님 , 지도 뷰 타이틀
       content: {
         title: record['content_title'],
         description: record['content_description'],
@@ -233,6 +234,32 @@ export const recordsToSendData = ({
           webUrl: record['content_mobile_web_url'],
         },
       },
+      social: {
+        // 필수 아님 , 이 중 3개만 사용 ( 우선순위는 위부터 아래 순 )
+        likeCount: 999,
+        commentCount: 999,
+        sharedCount: 999,
+        viewCount: 999,
+        subscriberCount: 999,
+      },
+      button_title: 'buttonTitle', // 버튼 이름 변경
+      buttons: [
+        // 버튼이 여러개인 경우 ( 최대 2개 )
+        {
+          title: 'buttonTitle1',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+        {
+          title: 'buttonTitle2',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+      ],
     };
   }
 
