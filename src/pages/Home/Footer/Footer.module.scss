@@ -1,0 +1,36 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: auto;
+
+  background-color: white;
+  border-radius: 0 0 8px 8px;
+
+  padding: 10px;
+
+  .label {
+    margin: 10px;
+    width: 100%;
+  }
+
+  input[type='file'] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    button + button {
+      margin-left: 10px;
+    }
+  }
+}

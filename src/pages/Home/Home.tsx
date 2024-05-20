@@ -4,12 +4,15 @@ import { MessageType, ExcelRecord, excelFileToRecords, recordsToSendData } from 
 
 import Feed from '@components/Feed';
 import Text from '@components/Text';
-import { Close, Excel, Hamburger } from '@images/index';
 import List from '@components/List';
 import Commerce from '@components/Commerce';
 import Location from '@components/Location';
-import Button from '@components/Button';
 import Header from './Header';
+import Footer from './Footer';
+
+export type FileChangeEvent = React.ChangeEvent<HTMLInputElement> & {
+  target: EventTarget & { files: FileList };
+};
 
 const kakao = (window as any).Kakao;
 
@@ -22,7 +25,7 @@ const Home = () => {
 
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const handleClick = async () => {
+  const handleSendMessage = async () => {
     if (!sendData) {
       return;
     }
@@ -30,17 +33,13 @@ const Home = () => {
     kakao.Share.sendDefault(sendData);
   };
 
-  const handleFileUpdateClick = () => {
+  const handleFileUpdate = () => {
     if (fileRef.current) {
       fileRef.current.click();
     }
   };
 
-  const handleFileChange = async (
-    e: React.ChangeEvent<HTMLInputElement> & {
-      target: EventTarget & { files: FileList };
-    },
-  ) => {
+  const handleFileChange = async (e: FileChangeEvent) => {
     const file = e.target.files[0];
     e.target.value = '';
 
@@ -60,7 +59,7 @@ const Home = () => {
     setFile(file);
   };
 
-  const handleResetFile = () => {
+  const handleFileReset = () => {
     setObjectType(null);
     setSendData(null);
     setRecord(null);
@@ -81,27 +80,14 @@ const Home = () => {
         </div>
       )}
 
-      <div className={styles.footer}>
-        <div className={styles.label}>{file ? file.name : '파일을 선택해 주세요'}</div>
-        <input
-          id="file"
-          type="file"
-          ref={fileRef}
-          onChange={handleFileChange}
-          accept=".xlsx, .xls, .csv"
-        />
-
-        {file ? (
-          <div className={styles.buttons}>
-            <Button color="none" onClick={handleResetFile} hasIcon>
-              <Close />
-            </Button>
-            <Button onClick={handleClick}>전송</Button>
-          </div>
-        ) : (
-          <Button onClick={handleFileUpdateClick}>파일 선택</Button>
-        )}
-      </div>
+      <Footer
+        file={file}
+        fileRef={fileRef}
+        onFileChange={handleFileChange}
+        onFileReset={handleFileReset}
+        onSendMessage={handleSendMessage}
+        onFileUpdate={handleFileUpdate}
+      />
     </div>
   );
 };
