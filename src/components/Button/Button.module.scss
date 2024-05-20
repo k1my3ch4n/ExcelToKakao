@@ -1,0 +1,25 @@
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 8px;
+}
+
+.l {
+  height: 40px;
+  padding: 10px 20px;
+}
+
+.m {
+  height: 30px;
+  padding: 5px 10px;
+}
+
+.yellow {
+  background-color: #fee500;
+
+  &:hover {
+    background-color: #fada0a;
+  }
+}
