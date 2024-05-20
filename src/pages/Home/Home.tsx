@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import styles from './Home.module.scss';
 import { MessageType, ExcelRecord, excelFileToRecords, recordsToSendData } from '@utils/excelUtil';
 
@@ -8,6 +8,7 @@ import { Close, Excel, Hamburger } from '@images/index';
 import List from '@components/List';
 import Commerce from '@components/Commerce';
 import Location from '@components/Location';
+import Button from '@src/components/Button';
 
 const kakao = (window as any).Kakao;
 
@@ -18,12 +19,20 @@ const Home = () => {
   const [objectType, setObjectType] = useState<MessageType | null>(null);
   const [sendData, setSendData] = useState<any>(null);
 
+  const fileRef = useRef<HTMLInputElement>(null);
+
   const handleClick = async () => {
     if (!sendData) {
       return;
     }
 
     kakao.Share.sendDefault(sendData);
+  };
+
+  const handleFileUpdateClick = () => {
+    if (fileRef.current) {
+      fileRef.current.click();
+    }
   };
 
   const handleFileChange = async (
@@ -68,9 +77,9 @@ const Home = () => {
         </div>
 
         <div className={styles.rhs}>
-          <button>
+          <Button size="m" color="none" hasIcon>
             <Hamburger />
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -86,17 +95,23 @@ const Home = () => {
 
       <div className={styles.footer}>
         <div className={styles.label}>{file ? file.name : '파일을 선택해 주세요'}</div>
-        <input id="file" type="file" onChange={handleFileChange} accept=".xlsx, .xls, .csv" />
+        <input
+          id="file"
+          type="file"
+          ref={fileRef}
+          onChange={handleFileChange}
+          accept=".xlsx, .xls, .csv"
+        />
 
         {file ? (
-          <>
-            <button onClick={handleResetFile}>
+          <div className={styles.buttons}>
+            <Button color="none" onClick={handleResetFile} hasIcon>
               <Close />
-            </button>
-            <button onClick={handleClick}>전송</button>
-          </>
+            </Button>
+            <Button onClick={handleClick}>전송</Button>
+          </div>
         ) : (
-          <label htmlFor="file">파일 선택</label>
+          <Button onClick={handleFileUpdateClick}>파일 선택</Button>
         )}
       </div>
     </div>

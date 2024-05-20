@@ -8,8 +8,8 @@
   min-width: 400px;
   min-height: 600px;
 
-  background-color: lightblue;
-  border: 1px solid lightgray;
+  background-color: #bacee0;
+  border: 1px solid #cccccc;
   border-radius: 8px;
 
   .headline {
@@ -63,6 +63,8 @@
     background-color: white;
     border-radius: 0 0 8px 8px;
 
+    padding: 10px;
+
     .label {
       margin: 10px;
       width: 100%;
@@ -77,18 +79,29 @@
       overflow: hidden;
     }
 
-    label,
-    button {
-      min-width: 70px;
-      padding: 10px 20px;
-      margin: 10px;
+    .buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-      background-color: yellow;
+      button + button {
+        margin-left: 10px;
+      }
+    }
+
+    label {
+      white-space: nowrap;
+      padding: 10px 20px;
+
+      background-color: #fee500;
       border: none;
       border-radius: 8px;
 
+      font-size: 14px;
+      height: 20px;
+
       &:hover {
-        background-color: yellowgreen;
+        background-color: #fada0a;
         cursor: pointer;
       }
     }

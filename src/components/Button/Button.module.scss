@@ -3,7 +3,12 @@
   justify-content: center;
   align-items: center;
 
+  border: none;
   border-radius: 8px;
+
+  white-space: nowrap;
+
+  cursor: pointer;
 }
 
 .l {
@@ -22,4 +27,9 @@
   &:hover {
     background-color: #fada0a;
   }
+}
+
+.hasIcon {
+  background-color: transparent;
+  padding: 4px;
 }
