@@ -189,6 +189,33 @@ export const recordsToSendData = ({
             webUrl: record['content_mobile_web_url2'],
           },
         },
+        {
+          title: record['content_title3'],
+          description: record['content_description3'],
+          imageUrl: record['content_image_url3'],
+          link: {
+            mobileWebUrl: record['content_web_url3'],
+            webUrl: record['content_mobile_web_url3'],
+          },
+        },
+      ],
+      button_title: 'buttonTitle', // 버튼 이름 변경
+      buttons: [
+        // 버튼이 여러개인 경우 ( 최대 2개 )
+        {
+          title: 'buttonTitle1',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
+        {
+          title: 'buttonTitle2',
+          link: {
+            mobileWebUrl: record['content_web_url'],
+            webUrl: record['content_mobile_web_url'],
+          },
+        },
       ],
     };
   }
