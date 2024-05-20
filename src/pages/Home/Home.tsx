@@ -2,13 +2,9 @@ import { useRef, useState } from 'react';
 import styles from './Home.module.scss';
 import { MessageType, ExcelRecord, excelFileToRecords, recordsToSendData } from '@utils/excelUtil';
 
-import Feed from '@components/Feed';
-import Text from '@components/Text';
-import List from '@components/List';
-import Commerce from '@components/Commerce';
-import Location from '@components/Location';
 import Header from './Header';
 import Footer from './Footer';
+import Content from './Content';
 
 export type FileChangeEvent = React.ChangeEvent<HTMLInputElement> & {
   target: EventTarget & { files: FileList };
@@ -69,17 +65,7 @@ const Home = () => {
   return (
     <div className={styles.wrapper}>
       <Header />
-
-      {record && (
-        <div className={styles.content}>
-          {objectType === 'feed' && <Feed record={record} />}
-          {objectType === 'text' && <Text record={record} />}
-          {objectType === 'list' && <List record={record} />}
-          {objectType === 'commerce' && <Commerce record={record} />}
-          {objectType === 'location' && <Location record={record} />}
-        </div>
-      )}
-
+      <Content objectType={objectType} record={record} />
       <Footer
         file={file}
         fileRef={fileRef}
