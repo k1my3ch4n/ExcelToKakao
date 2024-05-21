@@ -76,8 +76,8 @@ export const recordsToSendData = ({
         description: record['content_description'], // 필수 아님 . a 중 1개 필요
         imageUrl: record['content_image_url'], // 필수 아님 . a 중 1개 필요
         link: {
-          mobileWebUrl: record['content_web_url'], // 필수 아님 . b 중 1개 필요
-          webUrl: record['content_mobile_web_url'], // 필수 아님 . b 중 1개 필요
+          webUrl: record['content_web_url'], // 필수 아님 . b 중 1개 필요
+          mobileWebUrl: record['content_mobile_web_url'], // 필수 아님 . b 중 1개 필요
         },
       },
       itemContent: {
@@ -118,15 +118,15 @@ export const recordsToSendData = ({
         {
           title: 'buttonTitle1',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
         {
           title: 'buttonTitle2',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
       ],
@@ -134,6 +134,7 @@ export const recordsToSendData = ({
   }
 
   if (objectType === 'text') {
+    // 필수와 필수 아닌 것 비교
     sendData = {
       objectType,
       text: record['content'],
@@ -141,21 +142,21 @@ export const recordsToSendData = ({
         mobileWebUrl: record['content_web_url'],
         webUrl: record['content_mobile_web_url'],
       },
-      button_title: 'buttonTitle', // 버튼 이름 변경
+      buttonTitle: record['button_title'], // 버튼 이름 변경
       buttons: [
         // 버튼이 여러개인 경우 ( 최대 2개 )
         {
-          title: 'buttonTitle1',
+          title: record['buttons_title1'],
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['buttons_web_url1'],
+            mobileWebUrl: record['buttons_mobile_web_url1'],
           },
         },
         {
-          title: 'buttonTitle2',
+          title: record['buttons_title2'],
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['buttons_web_url2'],
+            mobileWebUrl: record['buttons_mobile_web_url2'],
           },
         },
       ],
@@ -167,8 +168,8 @@ export const recordsToSendData = ({
       objectType,
       headerTitle: record['header_title'],
       headerLink: {
-        mobileWebUrl: record['header_web_url'],
-        webUrl: record['header_mobile_web_url'],
+        webUrl: record['header_web_url'],
+        mobileWebUrl: record['header_mobile_web_url'],
       },
       contents: [
         {
@@ -176,8 +177,8 @@ export const recordsToSendData = ({
           description: record['content_description1'],
           imageUrl: record['content_image_url1'],
           link: {
-            mobileWebUrl: record['content_web_url1'],
-            webUrl: record['content_mobile_web_url1'],
+            webUrl: record['content_web_url1'],
+            mobileWebUrl: record['content_mobile_web_url1'],
           },
         },
         {
@@ -185,8 +186,8 @@ export const recordsToSendData = ({
           description: record['content_description2'],
           imageUrl: record['content_image_url2'],
           link: {
-            mobileWebUrl: record['content_web_url2'],
-            webUrl: record['content_mobile_web_url2'],
+            webUrl: record['content_web_url2'],
+            mobileWebUrl: record['content_mobile_web_url2'],
           },
         },
         {
@@ -194,8 +195,8 @@ export const recordsToSendData = ({
           description: record['content_description3'],
           imageUrl: record['content_image_url3'],
           link: {
-            mobileWebUrl: record['content_web_url3'],
-            webUrl: record['content_mobile_web_url3'],
+            webUrl: record['content_web_url3'],
+            mobileWebUrl: record['content_mobile_web_url3'],
           },
         },
       ],
@@ -205,15 +206,15 @@ export const recordsToSendData = ({
         {
           title: 'buttonTitle1',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
         {
           title: 'buttonTitle2',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
       ],
@@ -230,8 +231,8 @@ export const recordsToSendData = ({
         description: record['content_description'],
         imageUrl: record['content_image_url'],
         link: {
-          mobileWebUrl: record['content_web_url'],
-          webUrl: record['content_mobile_web_url'],
+          webUrl: record['content_web_url'],
+          mobileWebUrl: record['content_mobile_web_url'],
         },
       },
       social: {
@@ -248,15 +249,15 @@ export const recordsToSendData = ({
         {
           title: 'buttonTitle1',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
         {
           title: 'buttonTitle2',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
       ],
@@ -271,8 +272,8 @@ export const recordsToSendData = ({
         description: record['content_description'],
         imageUrl: record['content_image_url'],
         link: {
-          mobileWebUrl: record['content_web_url'],
-          webUrl: record['content_mobile_web_url'],
+          webUrl: record['content_web_url'],
+          mobileWebUrl: record['content_mobile_web_url'],
         },
       },
       commerce: {
@@ -290,15 +291,15 @@ export const recordsToSendData = ({
         {
           title: 'buttonTitle1',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
         {
           title: 'buttonTitle2',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
       ],
@@ -316,8 +317,8 @@ export const recordsToSendData = ({
         description: record['content_description'],
         imageUrl: record['content_image_url'],
         link: {
-          mobileWebUrl: record['content_web_url'],
-          webUrl: record['content_mobile_web_url'],
+          webUrl: record['content_web_url'],
+          mobileWebUrl: record['content_mobile_web_url'],
         },
       },
     };

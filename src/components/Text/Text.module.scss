@@ -9,16 +9,17 @@
     margin-top: 10px;
   }
 
-  .button {
-    border: 1px solid gray;
-    border-radius: 5px;
-
-    background-color: lightgray;
-
-    padding: 10px;
-
+  .buttons {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+  }
+
+  .button {
+    width: 100%;
+  }
+
+  .button + .button {
+    margin-left: 10px;
   }
 }
