@@ -3,11 +3,11 @@ import styles from './ItemList.module.scss';
 const ItemList = ({
   title = 'title 이 존재하지 않습니다.',
   description = 'description 이 존재하지 않습니다.',
-  imageSrc = '',
+  imageSrc,
 }: {
-  title?: string;
-  description?: string;
-  imageSrc?: string;
+  title: string | null;
+  description: string | null;
+  imageSrc: string | null;
 }) => {
   return (
     <div className={styles.wrapper}>
