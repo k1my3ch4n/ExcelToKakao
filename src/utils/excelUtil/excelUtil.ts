@@ -142,7 +142,7 @@ export const recordsToSendData = ({
     // 필수와 필수 아닌 것 비교
     sendData = {
       objectType,
-      text: record['content'],
+      text: record['content_text'],
       link: {
         mobileWebUrl: record['content_web_url'],
         webUrl: record['content_mobile_web_url'],
@@ -391,4 +391,44 @@ export const parsingButtonUtil = (record: ExcelRecord): ButtonsType[] => {
       buttonLink: singleButtonLink ?? singleButtonMobileLink ?? '',
     },
   ];
+};
+
+export const parsingContentUtil = (record: ExcelRecord) => {
+  const contentTitle = record['content_title'];
+  const contentDescription = record['content_description'];
+  const contentImageUrl = record['content_image_url'];
+  const contentWebLink = record['content_web_url'];
+  const contentMobileWebLink = record['content_mobile_web_url'];
+
+  return {
+    contentTitle,
+    contentDescription,
+    contentImageUrl,
+    contentWebLink,
+    contentMobileWebLink,
+  };
+};
+
+export const parsingTextUtil = (record: ExcelRecord) => {
+  const missingRecords = [];
+
+  const text = record['content_text'];
+  const webLink = record['content_web_url'];
+  const mobileWebLink = record['content_mobile_web_url'];
+
+  const buttons = parsingButtonUtil(record);
+
+  if (!text) {
+    missingRecords.push('content_text');
+  }
+
+  if (!webLink && !mobileWebLink) {
+    missingRecords.push('link');
+  }
+
+  return {
+    text,
+    buttons,
+    missingRecords,
+  };
 };
