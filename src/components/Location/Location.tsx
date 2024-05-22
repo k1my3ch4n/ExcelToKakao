@@ -1,6 +1,6 @@
 import ContentButtons from '../ContentButtons';
 import styles from './Location.module.scss';
-import { ExcelRecord } from '@utils/excelUtil';
+import { ExcelRecord, parsingButtonUtil } from '@utils/excelUtil';
 
 const Location = ({ record }: { record: ExcelRecord }) => {
   if (!record) {
@@ -11,11 +11,9 @@ const Location = ({ record }: { record: ExcelRecord }) => {
   const title = record['content_title'];
   const description = record['content_description'];
 
-  const singleButtonTitle = record['button_title'];
-  const buttonTitle1 = record['buttons_title1'];
-  const buttonTitle2 = record['buttons_title2'];
+  const buttons = parsingButtonUtil(record);
 
-  // todo : link 추가 , button 을 한번에 사용하는 hook을 만들 수 있을 것 같음
+  // todo : 버튼이 기본으로 2개인 경우임 . 수정 필요
 
   return (
     <>
@@ -26,11 +24,7 @@ const Location = ({ record }: { record: ExcelRecord }) => {
         <div className={styles.title}>{title ?? 'title 이 없습니다.'}</div>
         <div className={styles.description}>{description ?? 'description이 없습니다.'}</div>
 
-        <ContentButtons
-          hasManyButtons={true}
-          buttonTitle1={buttonTitle1 ?? singleButtonTitle ?? '자세히 보기'}
-          buttonTitle2={buttonTitle2 ?? '위치 보기'}
-        />
+        <ContentButtons buttons={buttons} />
       </div>
     </>
   );

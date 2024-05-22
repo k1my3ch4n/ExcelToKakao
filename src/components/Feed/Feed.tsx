@@ -1,6 +1,6 @@
 import ContentButtons from '../ContentButtons';
 import styles from './Feed.module.scss';
-import { ExcelRecord } from '@utils/excelUtil';
+import { ExcelRecord, parsingButtonUtil } from '@utils/excelUtil';
 
 const Feed = ({ record }: { record: ExcelRecord }) => {
   if (!record) {
@@ -11,12 +11,7 @@ const Feed = ({ record }: { record: ExcelRecord }) => {
   const title = record['content_title'] as string;
   const description = record['content_description'] as string;
 
-  const singleButtonTitle = record['button_title'];
-  const buttonTitle1 = record['buttons_title1'];
-  const buttonTitle2 = record['buttons_title2'];
-
-  const hasButtonTitle1 = !!buttonTitle1;
-  const hasButtonTitle2 = !!buttonTitle2;
+  const buttons = parsingButtonUtil(record);
 
   return (
     <>
@@ -28,12 +23,7 @@ const Feed = ({ record }: { record: ExcelRecord }) => {
         {/* itemContent 추가해야함 */}
         <div className={styles.description}>{description ?? 'description이 없습니다.'}</div>
         {/* social 추가해야함 */}
-        <ContentButtons
-          hasManyButtons={hasButtonTitle1 && hasButtonTitle2}
-          buttonTitle1={buttonTitle1}
-          buttonTitle2={buttonTitle2}
-          singleButtonTitle={singleButtonTitle}
-        />
+        <ContentButtons buttons={buttons} />
       </div>
     </>
   );

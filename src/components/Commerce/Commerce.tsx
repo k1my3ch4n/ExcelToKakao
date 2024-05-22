@@ -1,6 +1,6 @@
 import ContentButtons from '../ContentButtons';
 import styles from './Commerce.module.scss';
-import { ExcelRecord } from '@utils/excelUtil';
+import { ExcelRecord, parsingButtonUtil } from '@utils/excelUtil';
 
 const Commerce = ({ record }: { record: ExcelRecord }) => {
   if (!record) {
@@ -12,12 +12,7 @@ const Commerce = ({ record }: { record: ExcelRecord }) => {
   const productName = record['product_name'] as string;
   const regularPrice = record['regular_price'] as string;
 
-  const singleButtonTitle = record['button_title'];
-  const buttonTitle1 = record['buttons_title1'];
-  const buttonTitle2 = record['buttons_title2'];
-
-  const hasButtonTitle1 = !!buttonTitle1;
-  const hasButtonTitle2 = !!buttonTitle2;
+  const buttons = parsingButtonUtil(record);
 
   return (
     <>
@@ -29,12 +24,7 @@ const Commerce = ({ record }: { record: ExcelRecord }) => {
         <div className={styles.price}>{Number(regularPrice).toLocaleString()}원</div>
         <div className={styles.description}>{description}</div>
 
-        <ContentButtons
-          hasManyButtons={hasButtonTitle1 && hasButtonTitle2}
-          buttonTitle1={buttonTitle1}
-          buttonTitle2={buttonTitle2}
-          singleButtonTitle={singleButtonTitle}
-        />
+        <ContentButtons buttons={buttons} />
       </div>
     </>
   );

@@ -3,6 +3,11 @@ import { read, Range, Sheet, utils } from 'xlsx';
 export type ExcelRecord = Record<string, string | null>;
 export type MessageType = 'feed' | 'list' | 'location' | 'commerce' | 'text' | 'calendar';
 
+export interface ButtonsType {
+  buttonTitle: string;
+  buttonLink: string;
+}
+
 const trimColumns = (records: ExcelRecord): ExcelRecord => {
   return Object.entries(records).reduce<ExcelRecord>((acc, [key, value]) => {
     acc[key.trim()] = value;
@@ -327,7 +332,7 @@ export const recordsToSendData = ({
   return sendData;
 };
 
-export const parsingButtonUtil = (record: ExcelRecord) => {
+export const parsingButtonUtil = (record: ExcelRecord): ButtonsType[] => {
   const singleButtonTitle = record['button_title'];
   const singleButtonLink = record['content_web_url'];
   const singleButtonMobileLink = record['content_mobile_web_url'];
@@ -353,11 +358,11 @@ export const parsingButtonUtil = (record: ExcelRecord) => {
     return [
       {
         buttonTitle: buttonTitle1,
-        buttonLink: buttonLink1 || buttonMobileLink1,
+        buttonLink: buttonLink1 ?? buttonMobileLink1 ?? '',
       },
       {
         buttonTitle: buttonTitle2,
-        buttonLink: buttonLink2 || buttonMobileLink2,
+        buttonLink: buttonLink2 ?? buttonMobileLink2 ?? '',
       },
     ];
   }
@@ -366,7 +371,7 @@ export const parsingButtonUtil = (record: ExcelRecord) => {
     return [
       {
         buttonTitle: buttonTitle1,
-        buttonLink: buttonLink1 || buttonMobileLink1,
+        buttonLink: buttonLink1 ?? buttonMobileLink1 ?? '',
       },
     ];
   }
@@ -375,15 +380,15 @@ export const parsingButtonUtil = (record: ExcelRecord) => {
     return [
       {
         buttonTitle: buttonTitle2,
-        buttonLink: buttonLink2 || buttonMobileLink2,
+        buttonLink: buttonLink2 ?? buttonMobileLink2 ?? '',
       },
     ];
   }
 
   return [
     {
-      buttonTitle: singleButtonTitle,
-      buttonLink: singleButtonLink || singleButtonMobileLink,
+      buttonTitle: singleButtonTitle ?? '',
+      buttonLink: singleButtonLink ?? singleButtonMobileLink ?? '',
     },
   ];
 };

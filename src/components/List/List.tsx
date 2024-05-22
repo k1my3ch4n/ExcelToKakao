@@ -1,7 +1,7 @@
 import ContentButtons from '../ContentButtons';
 import ItemList from '../ItemList';
 import styles from './List.module.scss';
-import { ExcelRecord } from '@utils/excelUtil';
+import { ExcelRecord, parsingButtonUtil } from '@utils/excelUtil';
 
 const List = ({ record }: { record: ExcelRecord }) => {
   if (!record) {
@@ -21,14 +21,9 @@ const List = ({ record }: { record: ExcelRecord }) => {
   const contentDescription3 = record['content_description3'];
   const contentImage3 = record['content_image_url3'];
 
-  const singleButtonTitle = record['button_title'];
-  const buttonTitle1 = record['buttons_title1'];
-  const buttonTitle2 = record['buttons_title2'];
+  const buttons = parsingButtonUtil(record);
 
-  const hasButtonTitle1 = !!buttonTitle1;
-  const hasButtonTitle2 = !!buttonTitle2;
-
-  // todo : link 설정 , 필수값과 아닌값 분기 설정
+  // todo : 필수값과 아닌값 분기 설정
 
   return (
     <div className={styles.wrapper}>
@@ -45,12 +40,7 @@ const List = ({ record }: { record: ExcelRecord }) => {
         />
       )}
 
-      <ContentButtons
-        hasManyButtons={hasButtonTitle1 && hasButtonTitle2}
-        buttonTitle1={buttonTitle1}
-        buttonTitle2={buttonTitle2}
-        singleButtonTitle={singleButtonTitle}
-      />
+      <ContentButtons buttons={buttons} />
     </div>
   );
 };

@@ -2,34 +2,28 @@ import Button from '../Button';
 import styles from './ContentButtons.module.scss';
 
 const ContentButtons = ({
-  hasManyButtons,
-  buttonTitle1,
-  buttonTitle2,
-  singleButtonTitle,
+  buttons,
 }: {
-  hasManyButtons: boolean;
-  buttonTitle1?: string | null;
-  buttonTitle2?: string | null;
-  singleButtonTitle?: string | null;
+  buttons: {
+    buttonTitle: string;
+    buttonLink: string;
+  }[];
 }) => {
-  if (hasManyButtons) {
-    return (
-      <div className={styles.buttons}>
-        <Button className={styles.button} color="none">
-          {buttonTitle1}
-        </Button>
-        <Button className={styles.button} color="none">
-          {buttonTitle2}
-        </Button>
-      </div>
-    );
-  }
-
   return (
-    <div>
-      <Button className={styles.button} color="none">
-        {buttonTitle1 ?? buttonTitle2 ?? singleButtonTitle ?? '자세히 보기'}
-      </Button>
+    <div className={styles.buttons}>
+      {buttons.map((button, index) => {
+        const { buttonTitle, buttonLink } = button;
+
+        const handleClick = () => {
+          window.open(buttonLink);
+        };
+
+        return (
+          <Button className={styles.button} onClick={handleClick} key={index} color="none">
+            {buttonTitle}
+          </Button>
+        );
+      })}
     </div>
   );
 };
