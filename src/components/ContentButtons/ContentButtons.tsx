@@ -8,9 +8,9 @@ const ContentButtons = ({
   singleButtonTitle,
 }: {
   hasManyButtons: boolean;
-  buttonTitle1: string | null;
-  buttonTitle2: string | null;
-  singleButtonTitle: string | null;
+  buttonTitle1?: string | null;
+  buttonTitle2?: string | null;
+  singleButtonTitle?: string | null;
 }) => {
   if (hasManyButtons) {
     return (
