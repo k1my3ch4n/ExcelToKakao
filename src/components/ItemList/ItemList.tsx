@@ -1,8 +1,8 @@
 import styles from './ItemList.module.scss';
 
 const ItemList = ({
-  title = '',
-  description = '',
+  title = 'title 이 존재하지 않습니다.',
+  description = 'description 이 존재하지 않습니다.',
   imageSrc = '',
 }: {
   title?: string;
@@ -12,12 +12,14 @@ const ItemList = ({
   return (
     <div className={styles.wrapper}>
       <div className={styles.content}>
-        <div>{title}</div>
-        <div>{description}</div>
+        <div className={styles.title}>{title}</div>
+        <div className={styles.description}>{description}</div>
       </div>
-      <div className={styles.image}>
-        <img src={imageSrc} />
-      </div>
+      {imageSrc && (
+        <div className={styles.image}>
+          <img src={imageSrc} />
+        </div>
+      )}
     </div>
   );
 };

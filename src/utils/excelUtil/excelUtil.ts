@@ -1,6 +1,6 @@
 import { read, Range, Sheet, utils } from 'xlsx';
 
-export type ExcelRecord = Record<string, string | number | null>;
+export type ExcelRecord = Record<string, string | null>;
 export type MessageType = 'feed' | 'list' | 'location' | 'commerce' | 'text' | 'calendar';
 
 const trimColumns = (records: ExcelRecord): ExcelRecord => {

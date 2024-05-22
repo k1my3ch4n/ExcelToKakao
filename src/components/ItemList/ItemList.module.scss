@@ -2,12 +2,18 @@
   display: flex;
   justify-content: space-between;
 
-  padding-top: 10px;
+  margin-bottom: 10px;
 
   .content {
-    & > div {
-      width: fit-content;
-      padding-top: 10px;
+    padding: 5px;
+
+    .title {
+      font-size: 20px;
+    }
+
+    .description {
+      margin-top: 10px;
+      color: lightgray;
     }
   }
 
@@ -16,12 +22,10 @@
     align-items: center;
 
     width: 30%;
-
-    margin-left: 10px;
     padding: 5px;
 
     & > img {
-      border-radius: 8px;
+      border-radius: 2px;
       width: 100%;
       height: 100%;
     }

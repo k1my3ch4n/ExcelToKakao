@@ -1,6 +1,6 @@
 import { ExcelRecord } from '@utils/excelUtil';
 import styles from './Text.module.scss';
-import Button from '../Button';
+import ContentButtons from '../ContentButtons';
 
 const Text = ({ record }: { record: ExcelRecord }) => {
   if (!record) {
@@ -21,22 +21,12 @@ const Text = ({ record }: { record: ExcelRecord }) => {
     <div className={styles.wrapper}>
       <div className={styles.title}>{title ?? 'title이 없습니다.'}</div>
 
-      {hasButtonTitle1 && hasButtonTitle2 ? (
-        <div className={styles.buttons}>
-          <Button className={styles.button} color="none">
-            {buttonTitle1}
-          </Button>
-          <Button className={styles.button} color="none">
-            {buttonTitle2}
-          </Button>
-        </div>
-      ) : (
-        <div>
-          <Button className={styles.button} color="none">
-            {buttonTitle1 ?? buttonTitle2 ?? singleButtonTitle ?? '자세히 보기'}
-          </Button>
-        </div>
-      )}
+      <ContentButtons
+        hasManyButtons={hasButtonTitle1 && hasButtonTitle2}
+        buttonTitle1={buttonTitle1}
+        buttonTitle2={buttonTitle2}
+        singleButtonTitle={singleButtonTitle}
+      />
     </div>
   );
 };
