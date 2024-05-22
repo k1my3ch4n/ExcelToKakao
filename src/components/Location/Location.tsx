@@ -15,8 +15,10 @@ const Location = ({ record }: { record: ExcelRecord }) => {
   const buttonTitle1 = record['buttons_title1'];
   const buttonTitle2 = record['buttons_title2'];
 
+  // todo : link 추가 , button 을 한번에 사용하는 hook을 만들 수 있을 것 같음
+
   return (
-    <div className={styles.wrapper}>
+    <>
       <div className={styles.image}>
         {imageUrl ? <img src={imageUrl}></img> : '이미지가 없습니다.'}
       </div>
@@ -30,7 +32,7 @@ const Location = ({ record }: { record: ExcelRecord }) => {
           buttonTitle2={buttonTitle2 ?? '위치 보기'}
         />
       </div>
-    </div>
+    </>
   );
 };
 
