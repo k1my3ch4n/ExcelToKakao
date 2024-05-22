@@ -326,3 +326,64 @@ export const recordsToSendData = ({
 
   return sendData;
 };
+
+export const parsingButtonUtil = (record: ExcelRecord) => {
+  const singleButtonTitle = record['button_title'];
+  const singleButtonLink = record['content_web_url'];
+  const singleButtonMobileLink = record['content_mobile_web_url'];
+
+  const buttonTitle1 = record['buttons_title1'];
+  const buttonTitle2 = record['buttons_title2'];
+
+  const buttonLink1 = record['buttons_web_url1'];
+  const buttonLink2 = record['buttons_web_url2'];
+
+  const buttonMobileLink1 = record['buttons_mobile_web_url1'];
+  const buttonMobileLink2 = record['buttons_mobile_web_url2'];
+
+  // ? 버튼 타이틀이 존재하고 , 둘 중 한 개의 링크가 존재하는 경우 버튼이 있다고 간주
+  const hasButton1 = !!buttonTitle1 && (!!buttonLink1 || !!buttonMobileLink1);
+  const hasButton2 = !!buttonTitle2 && (!!buttonLink2 || !!buttonMobileLink2);
+
+  // ? 버튼 두개가 존재하는 경우 , 여러 버튼이 있는 것으로 간주
+  const hasManyButtons = hasButton1 && hasButton2;
+
+  // ? 버튼 array return
+  if (hasManyButtons) {
+    return [
+      {
+        buttonTitle: buttonTitle1,
+        buttonLink: buttonLink1 || buttonMobileLink1,
+      },
+      {
+        buttonTitle: buttonTitle2,
+        buttonLink: buttonLink2 || buttonMobileLink2,
+      },
+    ];
+  }
+
+  if (hasButton1) {
+    return [
+      {
+        buttonTitle: buttonTitle1,
+        buttonLink: buttonLink1 || buttonMobileLink1,
+      },
+    ];
+  }
+
+  if (hasButton2) {
+    return [
+      {
+        buttonTitle: buttonTitle2,
+        buttonLink: buttonLink2 || buttonMobileLink2,
+      },
+    ];
+  }
+
+  return [
+    {
+      buttonTitle: singleButtonTitle,
+      buttonLink: singleButtonLink || singleButtonMobileLink,
+    },
+  ];
+};
