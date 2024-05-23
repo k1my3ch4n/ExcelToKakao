@@ -8,6 +8,19 @@ export interface ButtonsType {
   buttonLink: string;
 }
 
+export interface IButtonsData {
+  title: string;
+  link: {
+    webUrl: string | null;
+    mobileWebUrl: string | null;
+  };
+}
+
+export interface IButtonData {
+  buttonTitle?: string;
+  buttons?: IButtonsData[];
+}
+
 const trimColumns = (records: ExcelRecord): ExcelRecord => {
   return Object.entries(records).reduce<ExcelRecord>((acc, [key, value]) => {
     acc[key.trim()] = value;
@@ -430,5 +443,120 @@ export const parsingTextUtil = (record: ExcelRecord) => {
     text,
     buttons,
     missingRecords,
+  };
+};
+
+export const checkLinkData = ({
+  record,
+  missingData,
+}: {
+  record: ExcelRecord;
+  missingData: Set<string>;
+}) => {
+  const linkData: { [key: string]: string } = {};
+
+  // ? link : 두 값중 하나만 존재하면 필수
+  const webLink = record['content_web_url'];
+  const mobileWebLink = record['content_mobile_web_url'];
+
+  // ? link 존재여부 확인
+  const hasLink = !!webLink || !!mobileWebLink;
+
+  if (!hasLink) {
+    missingData.add('link');
+  }
+
+  if (webLink) {
+    linkData['webUrl'] = webLink;
+  }
+
+  if (mobileWebLink) {
+    linkData['mobileWebUrl'] = mobileWebLink;
+  }
+
+  return { linkData };
+};
+
+export const checkButtonsData = (record: ExcelRecord) => {
+  const buttonsData: IButtonData = {};
+  const buttons: IButtonsData[] = [];
+
+  // ? buttonTitle : 값이 없다면 , '자세히 보기' 가 기본값
+  const buttonTitle = record['button_title'];
+
+  // ? buttons : 버튼이 여러개인 경우. buttonTitle 과 같이 사용되는 경우 , buttons 가 우선
+  const buttonsTitle1 = record['buttons_title1'];
+  const buttonsWebLink1 = record['buttons_web_url1'];
+  const buttonsMobileWebLink1 = record['buttons_mobile_web_url1'];
+
+  const buttonsTitle2 = record['buttons_title2'];
+  const buttonsWebLink2 = record['buttons_web_url2'];
+  const buttonsMobileWebLink2 = record['buttons_mobile_web_url2'];
+
+  // ? 버튼이 완전하게 존재하는 지 , 존재하지 않는지 확인
+  const hasButton1 = !!buttonsTitle1 && (!!buttonsWebLink1 || !!buttonsMobileWebLink1);
+  const hasButton2 = !!buttonsTitle2 && (!!buttonsWebLink2 || !!buttonsMobileWebLink2);
+
+  if (hasButton1) {
+    buttons.push({
+      title: buttonsTitle1,
+      link: {
+        webUrl: buttonsWebLink1,
+        mobileWebUrl: buttonsMobileWebLink1,
+      },
+    });
+  }
+
+  if (hasButton2) {
+    buttons.push({
+      title: buttonsTitle2,
+      link: {
+        webUrl: buttonsWebLink2,
+        mobileWebUrl: buttonsMobileWebLink2,
+      },
+    });
+  }
+
+  if (!!buttonTitle) {
+    buttonsData['buttonTitle'] = buttonTitle;
+  }
+
+  if (buttons.length > 0) {
+    buttonsData['buttons'] = buttons;
+  }
+
+  return buttonsData;
+};
+
+export const recordsToText = (record: ExcelRecord) => {
+  const missingData = new Set<string>();
+
+  // ? objectType
+  const objectType = record['objectType'] as string;
+
+  // ? title : 필수값
+  const text = record['content_text'];
+
+  // ? link 값 확인
+  const { linkData } = checkLinkData({ record, missingData });
+
+  // ? button 값 확인
+
+  const buttonsData = checkButtonsData(record);
+
+  if (!text) {
+    missingData.add('text');
+  }
+
+  const sendData = {
+    objectType,
+    text,
+    link: linkData,
+    ...buttonsData,
+  };
+
+  return {
+    sendData,
+    missingData,
   };
 };

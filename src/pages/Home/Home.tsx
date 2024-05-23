@@ -1,6 +1,12 @@
 import { useRef, useState } from 'react';
 import styles from './Home.module.scss';
-import { MessageType, ExcelRecord, excelFileToRecords, recordsToSendData } from '@utils/excelUtil';
+import {
+  MessageType,
+  ExcelRecord,
+  excelFileToRecords,
+  recordsToSendData,
+  recordsToText,
+} from '@utils/excelUtil';
 
 import Header from './Header';
 import Footer from './Footer';
@@ -51,10 +57,14 @@ const Home = () => {
     const record = await excelFileToRecords(file);
     const objectType = record['objectType'] as MessageType;
 
-    const sendData = recordsToSendData({ objectType, record });
+    const a = recordsToText(record);
+
+    console.log(a);
+
+    // const sendData = recordsToSendData({ objectType, record });
 
     setObjectType(objectType);
-    setSendData(sendData);
+    setSendData(a);
     setRecord(record);
 
     setFile(file);
