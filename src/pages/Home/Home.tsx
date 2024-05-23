@@ -1,11 +1,10 @@
 import { useRef, useState } from 'react';
 import styles from './Home.module.scss';
 import {
-  MessageType,
   ExcelRecord,
   excelFileToRecords,
-  recordsToSendData,
   recordsToText,
+  recordsToLocation,
 } from '@utils/excelUtil';
 
 import Header from './Header';
@@ -16,6 +15,7 @@ import Text from '@components/Text';
 import List from '@components/List';
 import Commerce from '@components/Commerce';
 import Location from '@components/Location';
+import { MessageType } from '@interface/excel';
 
 export type FileChangeEvent = React.ChangeEvent<HTMLInputElement> & {
   target: EventTarget & { files: FileList };
@@ -55,16 +55,24 @@ const Home = () => {
     }
 
     const record = await excelFileToRecords(file);
+    // todo : objectType 이 없는 경우 추가 예정
     const objectType = record['objectType'] as MessageType;
 
-    const a = recordsToText(record);
+    if (objectType === 'text') {
+      const { sendData } = recordsToText(record);
 
-    console.log(a);
+      setSendData(sendData);
+    }
+
+    if (objectType === 'location') {
+      const { sendData } = recordsToLocation(record);
+
+      setSendData(sendData);
+    }
 
     // const sendData = recordsToSendData({ objectType, record });
 
     setObjectType(objectType);
-    setSendData(a);
     setRecord(record);
 
     setFile(file);
@@ -76,6 +84,8 @@ const Home = () => {
     setRecord(null);
     setFile(null);
   };
+
+  console.log('sendData : ', sendData);
 
   return (
     <div className={styles.wrapper}>

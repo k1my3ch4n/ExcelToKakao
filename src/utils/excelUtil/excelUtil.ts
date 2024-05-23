@@ -1,24 +1,19 @@
+import {
+  IButtonData,
+  IButtonsData,
+  IContentData,
+  ILinkData,
+  ILocationData,
+  ITextData,
+  MessageType,
+} from '@interface/excel';
 import { read, Range, Sheet, utils } from 'xlsx';
 
 export type ExcelRecord = Record<string, string | null>;
-export type MessageType = 'feed' | 'list' | 'location' | 'commerce' | 'text' | 'calendar';
 
 export interface ButtonsType {
   buttonTitle: string;
   buttonLink: string;
-}
-
-export interface IButtonsData {
-  title: string;
-  link: {
-    webUrl: string | null;
-    mobileWebUrl: string | null;
-  };
-}
-
-export interface IButtonData {
-  buttonTitle?: string;
-  buttons?: IButtonsData[];
 }
 
 const trimColumns = (records: ExcelRecord): ExcelRecord => {
@@ -151,36 +146,6 @@ export const recordsToSendData = ({
     };
   }
 
-  if (objectType === 'text') {
-    // 필수와 필수 아닌 것 비교
-    sendData = {
-      objectType,
-      text: record['content_text'],
-      link: {
-        mobileWebUrl: record['content_web_url'],
-        webUrl: record['content_mobile_web_url'],
-      },
-      buttonTitle: record['button_title'], // 버튼 이름 변경
-      buttons: [
-        // 버튼이 여러개인 경우 ( 최대 2개 )
-        {
-          title: record['buttons_title1'],
-          link: {
-            webUrl: record['buttons_web_url1'],
-            mobileWebUrl: record['buttons_mobile_web_url1'],
-          },
-        },
-        {
-          title: record['buttons_title2'],
-          link: {
-            webUrl: record['buttons_web_url2'],
-            mobileWebUrl: record['buttons_mobile_web_url2'],
-          },
-        },
-      ],
-    };
-  }
-
   if (objectType === 'list') {
     sendData = {
       objectType,
@@ -253,32 +218,6 @@ export const recordsToSendData = ({
           mobileWebUrl: record['content_mobile_web_url'],
         },
       },
-      social: {
-        // 필수 아님 , 이 중 3개만 사용 ( 우선순위는 위부터 아래 순 )
-        likeCount: 999,
-        commentCount: 999,
-        sharedCount: 999,
-        viewCount: 999,
-        subscriberCount: 999,
-      },
-      button_title: 'buttonTitle', // 버튼 이름 변경
-      buttons: [
-        // 버튼이 여러개인 경우 ( 최대 2개 )
-        {
-          title: 'buttonTitle1',
-          link: {
-            webUrl: record['content_web_url'],
-            mobileWebUrl: record['content_mobile_web_url'],
-          },
-        },
-        {
-          title: 'buttonTitle2',
-          link: {
-            webUrl: record['content_web_url'],
-            mobileWebUrl: record['content_mobile_web_url'],
-          },
-        },
-      ],
     };
   }
 
@@ -453,7 +392,7 @@ export const checkLinkData = ({
   record: ExcelRecord;
   missingData: Set<string>;
 }) => {
-  const linkData: { [key: string]: string } = {};
+  const linkData = {} as ILinkData;
 
   // ? link : 두 값중 하나만 존재하면 필수
   const webLink = record['content_web_url'];
@@ -474,12 +413,12 @@ export const checkLinkData = ({
     linkData['mobileWebUrl'] = mobileWebLink;
   }
 
-  return { linkData };
+  return linkData;
 };
 
 export const checkButtonsData = (record: ExcelRecord) => {
-  const buttonsData: IButtonData = {};
-  const buttons: IButtonsData[] = [];
+  const buttonsData: IButtonsData = {};
+  const buttons: IButtonData[] = [];
 
   // ? buttonTitle : 값이 없다면 , '자세히 보기' 가 기본값
   const buttonTitle = record['button_title'];
@@ -498,22 +437,36 @@ export const checkButtonsData = (record: ExcelRecord) => {
   const hasButton2 = !!buttonsTitle2 && (!!buttonsWebLink2 || !!buttonsMobileWebLink2);
 
   if (hasButton1) {
+    const linkData = {} as ILinkData;
+
+    if (!!buttonsWebLink1) {
+      linkData['webUrl'] = buttonsWebLink1;
+    }
+
+    if (!!buttonsMobileWebLink1) {
+      linkData['mobileWebUrl'] = buttonsMobileWebLink1;
+    }
+
     buttons.push({
       title: buttonsTitle1,
-      link: {
-        webUrl: buttonsWebLink1,
-        mobileWebUrl: buttonsMobileWebLink1,
-      },
+      link: linkData,
     });
   }
 
   if (hasButton2) {
+    const linkData = {} as ILinkData;
+
+    if (!!buttonsWebLink2) {
+      linkData['webUrl'] = buttonsWebLink2;
+    }
+
+    if (!!buttonsMobileWebLink2) {
+      linkData['mobileWebUrl'] = buttonsMobileWebLink2;
+    }
+
     buttons.push({
       title: buttonsTitle2,
-      link: {
-        webUrl: buttonsWebLink2,
-        mobileWebUrl: buttonsMobileWebLink2,
-      },
+      link: linkData,
     });
   }
 
@@ -528,32 +481,108 @@ export const checkButtonsData = (record: ExcelRecord) => {
   return buttonsData;
 };
 
+export const checkContentData = ({
+  record,
+  missingData,
+}: {
+  record: ExcelRecord;
+  missingData: Set<string>;
+}) => {
+  const title = record['content_title'];
+  const description = record['content_description'];
+  const imageUrl = record['content_image_url'];
+
+  const linkData = checkLinkData({ record, missingData });
+
+  const contentData = {
+    link: linkData,
+  } as IContentData;
+
+  const hasContentData = !!title || !!description || !!imageUrl;
+
+  if (!hasContentData) {
+    missingData.add('content');
+  }
+
+  if (!!title) {
+    contentData['title'] = title;
+  }
+
+  if (!!description) {
+    contentData['description'] = description;
+  }
+
+  if (!!imageUrl) {
+    contentData['imageUrl'] = imageUrl;
+  }
+
+  console.log(contentData);
+
+  return contentData;
+};
+
 export const recordsToText = (record: ExcelRecord) => {
   const missingData = new Set<string>();
 
   // ? objectType
-  const objectType = record['objectType'] as string;
+  const objectType = record['objectType'] as MessageType;
 
   // ? title : 필수값
   const text = record['content_text'];
 
   // ? link 값 확인
-  const { linkData } = checkLinkData({ record, missingData });
+  const linkData = checkLinkData({ record, missingData });
 
   // ? button 값 확인
-
   const buttonsData = checkButtonsData(record);
 
   if (!text) {
     missingData.add('text');
   }
 
-  const sendData = {
+  const sendData: ITextData = {
     objectType,
     text,
     link: linkData,
     ...buttonsData,
   };
+
+  return {
+    sendData,
+    missingData,
+  };
+};
+
+export const recordsToLocation = (record: ExcelRecord) => {
+  const missingData = new Set<string>();
+
+  // ? objectType
+  const objectType = record['objectType'] as MessageType;
+
+  // ? address 필수 / addressTitle 은 필수 아님
+  const address = record['address'];
+  const addressTitle = record['address_title'];
+
+  // ? content 확인
+  const contentData = checkContentData({ record, missingData });
+
+  // ? button 값 확인
+  const buttonsData = checkButtonsData(record);
+
+  if (!address) {
+    missingData.add('address');
+  }
+
+  const sendData: ILocationData = {
+    objectType,
+    address,
+    content: contentData,
+    ...buttonsData,
+  };
+
+  if (addressTitle) {
+    sendData['addressTitle'] = addressTitle;
+  }
 
   return {
     sendData,
