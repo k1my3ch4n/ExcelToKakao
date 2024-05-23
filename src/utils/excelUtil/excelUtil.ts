@@ -204,23 +204,6 @@ export const recordsToSendData = ({
     };
   }
 
-  if (objectType === 'location') {
-    sendData = {
-      objectType,
-      address: record['address'],
-      addressTitle: 'addressTitle', // 필수 아님 , 지도 뷰 타이틀
-      content: {
-        title: record['content_title'],
-        description: record['content_description'],
-        imageUrl: record['content_image_url'],
-        link: {
-          webUrl: record['content_web_url'],
-          mobileWebUrl: record['content_mobile_web_url'],
-        },
-      },
-    };
-  }
-
   if (objectType === 'commerce') {
     sendData = {
       objectType,
@@ -516,8 +499,6 @@ export const checkContentData = ({
     contentData['imageUrl'] = imageUrl;
   }
 
-  console.log(contentData);
-
   return contentData;
 };
 
@@ -582,6 +563,110 @@ export const recordsToLocation = (record: ExcelRecord) => {
 
   if (addressTitle) {
     sendData['addressTitle'] = addressTitle;
+  }
+
+  return {
+    sendData,
+    missingData,
+  };
+};
+
+export const recordsToFeed = (record: ExcelRecord) => {
+  const missingData = new Set<string>();
+
+  // ? objectType
+  const objectType = record['objectType'] as MessageType;
+
+  // ? content 확인
+  const contentData = checkContentData({ record, missingData });
+
+  // ? button 값 확인
+  const buttonsData = checkButtonsData(record);
+
+  const profileText = record['profile_text'];
+  const profileImageUrl = record['profile_image_url'];
+  const titleImageText = record['profile_image_text'];
+  const titleImageUrl = record['title_image_url'];
+  const titleImageCategory = record['title_image_category'];
+
+  // todo : 5개까지 존재할 수 있는데 , 일일히 해야하는 불편함이 있음. 이를 한번에 해결할 수 있는지 ?
+  const itemData = [];
+
+  const item1 = record['item1'];
+  const itemOp1 = record['item_op1'];
+
+  const hasItem1 = !!item1 && !!itemOp1;
+
+  if (hasItem1) {
+    itemData.push({
+      item: item1,
+      itemOp: itemOp1,
+    });
+  }
+
+  const item2 = record['item2'];
+  const itemOp2 = record['item_op2'];
+
+  const hasItem2 = !!item2 && !!itemOp2;
+
+  if (hasItem2) {
+    itemData.push({
+      item: item2,
+      itemOp: itemOp2,
+    });
+  }
+
+  const item3 = record['item3'];
+  const itemOp3 = record['item_op3'];
+
+  const hasItem3 = !!item3 && !!itemOp3;
+
+  if (hasItem3) {
+    itemData.push({
+      item: item3,
+      itemOp: itemOp3,
+    });
+  }
+
+  const sum = record['sum'];
+  const sumOp = record['sum_op'];
+
+  const sendData: any = {
+    objectType,
+    content: contentData,
+    ...buttonsData,
+  };
+
+  if (!!profileText) {
+    sendData['profileText'] = profileText;
+  }
+
+  if (!!profileImageUrl) {
+    sendData['profileImageUrl'] = profileImageUrl;
+  }
+
+  if (!!titleImageText) {
+    sendData['titleImageText'] = titleImageText;
+  }
+
+  if (!!titleImageUrl) {
+    sendData['titleImageUrl'] = titleImageUrl;
+  }
+
+  if (!!titleImageCategory) {
+    sendData['titleImageCategory'] = titleImageCategory;
+  }
+
+  if (!!sum) {
+    sendData['sum'] = sum;
+  }
+
+  if (!!sumOp) {
+    sendData['sumOp'] = sumOp;
+  }
+
+  if (itemData.length > 0) {
+    sendData['items'] = itemData;
   }
 
   return {
