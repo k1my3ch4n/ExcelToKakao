@@ -1,7 +1,12 @@
 import { read, Range, Sheet, utils } from 'xlsx';
 
-export type ExcelRecord = Record<string, string | number | null>;
+export type ExcelRecord = Record<string, string | null>;
 export type MessageType = 'feed' | 'list' | 'location' | 'commerce' | 'text' | 'calendar';
+
+export interface ButtonsType {
+  buttonTitle: string;
+  buttonLink: string;
+}
 
 const trimColumns = (records: ExcelRecord): ExcelRecord => {
   return Object.entries(records).reduce<ExcelRecord>((acc, [key, value]) => {
@@ -76,8 +81,8 @@ export const recordsToSendData = ({
         description: record['content_description'], // 필수 아님 . a 중 1개 필요
         imageUrl: record['content_image_url'], // 필수 아님 . a 중 1개 필요
         link: {
-          mobileWebUrl: record['content_web_url'], // 필수 아님 . b 중 1개 필요
-          webUrl: record['content_mobile_web_url'], // 필수 아님 . b 중 1개 필요
+          webUrl: record['content_web_url'], // 필수 아님 . b 중 1개 필요
+          mobileWebUrl: record['content_mobile_web_url'], // 필수 아님 . b 중 1개 필요
         },
       },
       itemContent: {
@@ -118,15 +123,15 @@ export const recordsToSendData = ({
         {
           title: 'buttonTitle1',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
         {
           title: 'buttonTitle2',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
       ],
@@ -134,28 +139,29 @@ export const recordsToSendData = ({
   }
 
   if (objectType === 'text') {
+    // 필수와 필수 아닌 것 비교
     sendData = {
       objectType,
-      text: record['content'],
+      text: record['content_text'],
       link: {
         mobileWebUrl: record['content_web_url'],
         webUrl: record['content_mobile_web_url'],
       },
-      button_title: 'buttonTitle', // 버튼 이름 변경
+      buttonTitle: record['button_title'], // 버튼 이름 변경
       buttons: [
         // 버튼이 여러개인 경우 ( 최대 2개 )
         {
-          title: 'buttonTitle1',
+          title: record['buttons_title1'],
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['buttons_web_url1'],
+            mobileWebUrl: record['buttons_mobile_web_url1'],
           },
         },
         {
-          title: 'buttonTitle2',
+          title: record['buttons_title2'],
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['buttons_web_url2'],
+            mobileWebUrl: record['buttons_mobile_web_url2'],
           },
         },
       ],
@@ -167,8 +173,8 @@ export const recordsToSendData = ({
       objectType,
       headerTitle: record['header_title'],
       headerLink: {
-        mobileWebUrl: record['header_web_url'],
-        webUrl: record['header_mobile_web_url'],
+        webUrl: record['header_web_url'],
+        mobileWebUrl: record['header_mobile_web_url'],
       },
       contents: [
         {
@@ -176,8 +182,8 @@ export const recordsToSendData = ({
           description: record['content_description1'],
           imageUrl: record['content_image_url1'],
           link: {
-            mobileWebUrl: record['content_web_url1'],
-            webUrl: record['content_mobile_web_url1'],
+            webUrl: record['content_web_url1'],
+            mobileWebUrl: record['content_mobile_web_url1'],
           },
         },
         {
@@ -185,8 +191,8 @@ export const recordsToSendData = ({
           description: record['content_description2'],
           imageUrl: record['content_image_url2'],
           link: {
-            mobileWebUrl: record['content_web_url2'],
-            webUrl: record['content_mobile_web_url2'],
+            webUrl: record['content_web_url2'],
+            mobileWebUrl: record['content_mobile_web_url2'],
           },
         },
         {
@@ -194,8 +200,8 @@ export const recordsToSendData = ({
           description: record['content_description3'],
           imageUrl: record['content_image_url3'],
           link: {
-            mobileWebUrl: record['content_web_url3'],
-            webUrl: record['content_mobile_web_url3'],
+            webUrl: record['content_web_url3'],
+            mobileWebUrl: record['content_mobile_web_url3'],
           },
         },
       ],
@@ -205,15 +211,15 @@ export const recordsToSendData = ({
         {
           title: 'buttonTitle1',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
         {
           title: 'buttonTitle2',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
       ],
@@ -230,8 +236,8 @@ export const recordsToSendData = ({
         description: record['content_description'],
         imageUrl: record['content_image_url'],
         link: {
-          mobileWebUrl: record['content_web_url'],
-          webUrl: record['content_mobile_web_url'],
+          webUrl: record['content_web_url'],
+          mobileWebUrl: record['content_mobile_web_url'],
         },
       },
       social: {
@@ -248,15 +254,15 @@ export const recordsToSendData = ({
         {
           title: 'buttonTitle1',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
         {
           title: 'buttonTitle2',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
       ],
@@ -271,8 +277,8 @@ export const recordsToSendData = ({
         description: record['content_description'],
         imageUrl: record['content_image_url'],
         link: {
-          mobileWebUrl: record['content_web_url'],
-          webUrl: record['content_mobile_web_url'],
+          webUrl: record['content_web_url'],
+          mobileWebUrl: record['content_mobile_web_url'],
         },
       },
       commerce: {
@@ -290,15 +296,15 @@ export const recordsToSendData = ({
         {
           title: 'buttonTitle1',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
         {
           title: 'buttonTitle2',
           link: {
-            mobileWebUrl: record['content_web_url'],
-            webUrl: record['content_mobile_web_url'],
+            webUrl: record['content_web_url'],
+            mobileWebUrl: record['content_mobile_web_url'],
           },
         },
       ],
@@ -316,12 +322,113 @@ export const recordsToSendData = ({
         description: record['content_description'],
         imageUrl: record['content_image_url'],
         link: {
-          mobileWebUrl: record['content_web_url'],
-          webUrl: record['content_mobile_web_url'],
+          webUrl: record['content_web_url'],
+          mobileWebUrl: record['content_mobile_web_url'],
         },
       },
     };
   }
 
   return sendData;
+};
+
+export const parsingButtonUtil = (record: ExcelRecord): ButtonsType[] => {
+  const singleButtonTitle = record['button_title'];
+  const singleButtonLink = record['content_web_url'];
+  const singleButtonMobileLink = record['content_mobile_web_url'];
+
+  const buttonTitle1 = record['buttons_title1'];
+  const buttonTitle2 = record['buttons_title2'];
+
+  const buttonLink1 = record['buttons_web_url1'];
+  const buttonLink2 = record['buttons_web_url2'];
+
+  const buttonMobileLink1 = record['buttons_mobile_web_url1'];
+  const buttonMobileLink2 = record['buttons_mobile_web_url2'];
+
+  // ? 버튼 타이틀이 존재하고 , 둘 중 한 개의 링크가 존재하는 경우 버튼이 있다고 간주
+  const hasButton1 = !!buttonTitle1 && (!!buttonLink1 || !!buttonMobileLink1);
+  const hasButton2 = !!buttonTitle2 && (!!buttonLink2 || !!buttonMobileLink2);
+
+  // ? 버튼 두개가 존재하는 경우 , 여러 버튼이 있는 것으로 간주
+  const hasManyButtons = hasButton1 && hasButton2;
+
+  // ? 버튼 array return
+  if (hasManyButtons) {
+    return [
+      {
+        buttonTitle: buttonTitle1,
+        buttonLink: buttonLink1 ?? buttonMobileLink1 ?? '',
+      },
+      {
+        buttonTitle: buttonTitle2,
+        buttonLink: buttonLink2 ?? buttonMobileLink2 ?? '',
+      },
+    ];
+  }
+
+  if (hasButton1) {
+    return [
+      {
+        buttonTitle: buttonTitle1,
+        buttonLink: buttonLink1 ?? buttonMobileLink1 ?? '',
+      },
+    ];
+  }
+
+  if (hasButton2) {
+    return [
+      {
+        buttonTitle: buttonTitle2,
+        buttonLink: buttonLink2 ?? buttonMobileLink2 ?? '',
+      },
+    ];
+  }
+
+  return [
+    {
+      buttonTitle: singleButtonTitle ?? '',
+      buttonLink: singleButtonLink ?? singleButtonMobileLink ?? '',
+    },
+  ];
+};
+
+export const parsingContentUtil = (record: ExcelRecord) => {
+  const contentTitle = record['content_title'];
+  const contentDescription = record['content_description'];
+  const contentImageUrl = record['content_image_url'];
+  const contentWebLink = record['content_web_url'];
+  const contentMobileWebLink = record['content_mobile_web_url'];
+
+  return {
+    contentTitle,
+    contentDescription,
+    contentImageUrl,
+    contentWebLink,
+    contentMobileWebLink,
+  };
+};
+
+export const parsingTextUtil = (record: ExcelRecord) => {
+  const missingRecords = [];
+
+  const text = record['content_text'];
+  const webLink = record['content_web_url'];
+  const mobileWebLink = record['content_mobile_web_url'];
+
+  const buttons = parsingButtonUtil(record);
+
+  if (!text) {
+    missingRecords.push('content_text');
+  }
+
+  if (!webLink && !mobileWebLink) {
+    missingRecords.push('link');
+  }
+
+  return {
+    text,
+    buttons,
+    missingRecords,
+  };
 };

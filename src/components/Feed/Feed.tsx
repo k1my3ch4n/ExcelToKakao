@@ -1,6 +1,6 @@
-import Wrapper from '../Wrapper';
+import ContentButtons from '../ContentButtons';
 import styles from './Feed.module.scss';
-import { ExcelRecord } from '@utils/excelUtil';
+import { ExcelRecord, parsingButtonUtil } from '@utils/excelUtil';
 
 const Feed = ({ record }: { record: ExcelRecord }) => {
   if (!record) {
@@ -11,8 +11,10 @@ const Feed = ({ record }: { record: ExcelRecord }) => {
   const title = record['content_title'] as string;
   const description = record['content_description'] as string;
 
+  const buttons = parsingButtonUtil(record);
+
   return (
-    <Wrapper>
+    <>
       <div className={styles.image}>
         {imageUrl ? <img src={imageUrl}></img> : '이미지가 없습니다.'}
       </div>
@@ -21,9 +23,9 @@ const Feed = ({ record }: { record: ExcelRecord }) => {
         {/* itemContent 추가해야함 */}
         <div className={styles.description}>{description ?? 'description이 없습니다.'}</div>
         {/* social 추가해야함 */}
-        <div className={styles.button}>자세히 보기</div>
+        <ContentButtons buttons={buttons} />
       </div>
-    </Wrapper>
+    </>
   );
 };
 

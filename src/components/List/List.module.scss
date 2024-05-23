@@ -1,55 +1,9 @@
 .wrapper {
-  border-radius: 8px;
-
-  background-color: white;
   padding: 10px;
 
   .title {
-    padding: 10px 10px 0 10px;
-    font-weight: 600;
-  }
-
-  .list {
-    display: flex;
-    justify-content: space-between;
-
-    padding-top: 10px;
-
-    .content {
-      & > div {
-        width: fit-content;
-        padding-top: 10px;
-      }
-    }
-
-    .image {
-      display: flex;
-      align-items: center;
-
-      width: 30%;
-
-      margin-left: 10px;
-      padding: 5px;
-
-      & > img {
-        border-radius: 8px;
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
-
-  .button {
-    margin-top: 10px;
-    border: 1px solid gray;
-    border-radius: 5px;
-
-    background-color: lightgray;
-
     padding: 10px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-weight: 600;
+    font-size: 20px;
   }
 }

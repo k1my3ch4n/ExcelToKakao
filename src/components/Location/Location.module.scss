@@ -1,53 +1,22 @@
-.wrapper {
-  border-radius: 8px;
+.image {
+  & > img {
+    border-radius: 8px 8px 0 0;
+    width: 100%;
+  }
+}
 
-  background-color: white;
+.detail {
+  padding: 10px;
 
-  .image {
-    & > img {
-      border-radius: 8px 8px 0 0;
-      width: 100%;
-    }
+  div + div {
+    margin-top: 10px;
   }
 
-  .detail {
-    padding: 10px;
+  .title {
+    font-weight: 600;
+  }
 
-    div + div {
-      margin-top: 10px;
-    }
-
-    .title {
-      font-weight: 600;
-    }
-
-    .description {
-      color: lightgray;
-    }
-
-    .buttons {
-      display: flex;
-      align-items: center;
-
-      .button + .button {
-        margin-left: 10px;
-      }
-
-      .button {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        width: 100%;
-
-        border: 1px solid gray;
-        border-radius: 5px;
-
-        background-color: lightgray;
-
-        margin-top: 0;
-        padding: 10px;
-      }
-    }
+  .description {
+    color: lightgray;
   }
 }
