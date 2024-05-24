@@ -1,18 +1,21 @@
-import { ExcelRecord, parsingTextUtil } from '@utils/excelUtil';
 import styles from './Text.module.scss';
-import ContentButtons from '../ContentButtons';
+import ContentButtons from '../NewContentButtons';
+import { ITextData } from '@interface/excel';
 
-const Text = ({ record }: { record: ExcelRecord }) => {
-  if (!record) {
-    return null;
-  }
+const Text = ({ sendData }: { sendData: ITextData }) => {
+  const { text, link, buttonTitle, buttons } = sendData;
 
-  const { text, buttons } = parsingTextUtil(record);
+  const hasButtons = !!buttons && buttons?.length > 0;
+
+  const normalButton = {
+    title: buttonTitle ?? '자세히 보기',
+    link,
+  };
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.title}>{text ?? 'text가 없습니다.'}</div>
-      <ContentButtons buttons={buttons} />
+      <ContentButtons buttons={hasButtons ? buttons : [normalButton]} />
     </div>
   );
 };

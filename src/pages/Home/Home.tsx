@@ -20,7 +20,7 @@ const kakao = (window as any).Kakao;
 
 const Home = () => {
   const [file, setFile] = useState<File | null>(null);
-
+  const [missingData, setMissingData] = useState<Set<string>>();
   const [record, setRecord] = useState<ExcelRecord | null>(null);
   const [objectType, setObjectType] = useState<MessageType | null>(null);
   const [sendData, setSendData] = useState<any>(null);
@@ -51,16 +51,12 @@ const Home = () => {
 
     const record = await excelFileToRecords(file);
 
-    const {
-      objectType,
-      sendData,
-      // missingData,
-    } = recordsToSendData(record);
+    const { objectType, sendData, missingData } = recordsToSendData(record);
 
     setObjectType(objectType);
+    setMissingData(missingData);
     setSendData(sendData);
     setRecord(record);
-
     setFile(file);
   };
 
@@ -80,12 +76,13 @@ const Home = () => {
       {record && (
         <Wrapper>
           {objectType === 'feed' && <Feed record={record} />}
-          {objectType === 'text' && <Text record={record} />}
           {objectType === 'list' && <List record={record} />}
           {objectType === 'commerce' && <Commerce record={record} />}
           {objectType === 'location' && <Location record={record} />}
         </Wrapper>
       )}
+
+      {sendData && <Wrapper>{objectType === 'text' && <Text sendData={sendData} />}</Wrapper>}
 
       <Footer
         file={file}
