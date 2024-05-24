@@ -5,6 +5,7 @@ import {
   excelFileToRecords,
   recordsToText,
   recordsToLocation,
+  recordsToFeed,
 } from '@utils/excelUtil';
 
 import Header from './Header';
@@ -57,6 +58,12 @@ const Home = () => {
     const record = await excelFileToRecords(file);
     // todo : objectType 이 없는 경우 추가 예정
     const objectType = record['objectType'] as MessageType;
+
+    if (objectType === 'feed') {
+      const { sendData } = recordsToFeed(record);
+
+      setSendData(sendData);
+    }
 
     if (objectType === 'text') {
       const { sendData } = recordsToText(record);

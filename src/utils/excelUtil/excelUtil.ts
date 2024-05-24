@@ -637,40 +637,48 @@ export const recordsToFeed = (record: ExcelRecord) => {
     ...buttonsData,
   };
 
+  const itemContent: any = {};
+
   if (!!profileText) {
-    sendData['profileText'] = profileText;
+    itemContent['profileText'] = profileText;
   }
 
   if (!!profileImageUrl) {
-    sendData['profileImageUrl'] = profileImageUrl;
+    itemContent['profileImageUrl'] = profileImageUrl;
   }
 
   if (!!titleImageText) {
-    sendData['titleImageText'] = titleImageText;
+    itemContent['titleImageText'] = titleImageText;
   }
 
   if (!!titleImageUrl) {
-    sendData['titleImageUrl'] = titleImageUrl;
+    itemContent['titleImageUrl'] = titleImageUrl;
   }
 
   if (!!titleImageCategory) {
-    sendData['titleImageCategory'] = titleImageCategory;
+    itemContent['titleImageCategory'] = titleImageCategory;
   }
 
   if (!!sum) {
-    sendData['sum'] = sum;
+    itemContent['sum'] = sum;
   }
 
   if (!!sumOp) {
-    sendData['sumOp'] = sumOp;
+    itemContent['sumOp'] = sumOp;
   }
 
   if (itemData.length > 0) {
-    sendData['items'] = itemData;
+    itemContent['items'] = itemData;
   }
+
+  sendData['itemContent'] = itemContent;
 
   return {
     sendData,
     missingData,
   };
+};
+
+export const recordsToList = (record: ExcelRecord) => {
+  const missingData = new Set<string>();
 };
