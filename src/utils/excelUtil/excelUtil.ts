@@ -72,78 +72,6 @@ export const excelFileToRecords = async (excelFile: File) => {
   }
 };
 
-export const recordsToSendData = ({
-  objectType,
-  record,
-}: {
-  objectType: MessageType;
-  record: ExcelRecord;
-}) => {
-  let sendData = {};
-
-  if (objectType === 'commerce') {
-    sendData = {
-      objectType,
-      content: {
-        title: record['content_title'],
-        description: record['content_description'],
-        imageUrl: record['content_image_url'],
-        link: {
-          webUrl: record['content_web_url'],
-          mobileWebUrl: record['content_mobile_web_url'],
-        },
-      },
-      commerce: {
-        productName: record['product_name'], // 필수 아님
-        regularPrice: record['regular_price'], // 필수
-        discountPrice: 'discountPrice', // 필수 아님
-        discountRate: 'discountRate', // 필수 아님
-        fixedDiscountPrice: 'fixedDiscountPrice', // 필수 아님
-        currency_unit: 'currency_unit', // 필수 아님
-        currencyUnitPosition: 1, // 필수 아님
-      },
-      button_title: 'buttonTitle', // 버튼 이름 변경
-      buttons: [
-        // 버튼이 여러개인 경우 ( 최대 2개 )
-        {
-          title: 'buttonTitle1',
-          link: {
-            webUrl: record['content_web_url'],
-            mobileWebUrl: record['content_mobile_web_url'],
-          },
-        },
-        {
-          title: 'buttonTitle2',
-          link: {
-            webUrl: record['content_web_url'],
-            mobileWebUrl: record['content_mobile_web_url'],
-          },
-        },
-      ],
-    };
-  }
-
-  // todo : calendar id 해결해야 함.
-  if (objectType === 'calendar') {
-    sendData = {
-      objectType,
-      idType: record['IdType'],
-      id: record['id'],
-      content: {
-        title: record['content_title'],
-        description: record['content_description'],
-        imageUrl: record['content_image_url'],
-        link: {
-          webUrl: record['content_web_url'],
-          mobileWebUrl: record['content_mobile_web_url'],
-        },
-      },
-    };
-  }
-
-  return sendData;
-};
-
 export const parsingButtonUtil = (record: ExcelRecord): ButtonsType[] => {
   const singleButtonTitle = record['button_title'];
   const singleButtonLink = record['content_web_url'];
@@ -379,9 +307,13 @@ export const checkContentData = ({
   return contentData;
 };
 
-export const recordsToText = (record: ExcelRecord) => {
-  const missingData = new Set<string>();
-
+export const recordsToText = ({
+  record,
+  missingData,
+}: {
+  record: ExcelRecord;
+  missingData: Set<string>;
+}) => {
   // ? objectType
   const objectType = record['objectType'] as MessageType;
 
@@ -411,9 +343,13 @@ export const recordsToText = (record: ExcelRecord) => {
   };
 };
 
-export const recordsToLocation = (record: ExcelRecord) => {
-  const missingData = new Set<string>();
-
+export const recordsToLocation = ({
+  record,
+  missingData,
+}: {
+  record: ExcelRecord;
+  missingData: Set<string>;
+}) => {
   // ? objectType
   const objectType = record['objectType'] as MessageType;
 
@@ -448,9 +384,13 @@ export const recordsToLocation = (record: ExcelRecord) => {
   };
 };
 
-export const recordsToFeed = (record: ExcelRecord) => {
-  const missingData = new Set<string>();
-
+export const recordsToFeed = ({
+  record,
+  missingData,
+}: {
+  record: ExcelRecord;
+  missingData: Set<string>;
+}) => {
   // ? objectType
   const objectType = record['objectType'] as MessageType;
 
@@ -556,9 +496,13 @@ export const recordsToFeed = (record: ExcelRecord) => {
   };
 };
 
-export const recordsToList = (record: ExcelRecord) => {
-  const missingData = new Set<string>();
-
+export const recordsToList = ({
+  record,
+  missingData,
+}: {
+  record: ExcelRecord;
+  missingData: Set<string>;
+}) => {
   // ? objectType
   const objectType = record['objectType'] as MessageType;
 
@@ -714,9 +658,13 @@ export const recordsToList = (record: ExcelRecord) => {
   };
 };
 
-export const recordsToCommerce = (record: ExcelRecord) => {
-  const missingData = new Set<string>();
-
+export const recordsToCommerce = ({
+  record,
+  missingData,
+}: {
+  record: ExcelRecord;
+  missingData: Set<string>;
+}) => {
   // ? objectType
   const objectType = record['objectType'] as MessageType;
 
@@ -778,5 +726,77 @@ export const recordsToCommerce = (record: ExcelRecord) => {
   return {
     sendData,
     missingData,
+  };
+};
+
+export const recordsToSendData = (record: ExcelRecord) => {
+  const missingData = new Set<string>();
+
+  const objectType = record['objectType'] as MessageType | null;
+
+  if (!objectType) {
+    missingData.add('objectType');
+
+    return {
+      objectType,
+      missingData,
+      sendData: null,
+    };
+  }
+
+  if (objectType === 'feed') {
+    const { sendData } = recordsToFeed({ record, missingData });
+
+    return {
+      objectType,
+      missingData,
+      sendData,
+    };
+  }
+
+  if (objectType === 'text') {
+    const { sendData } = recordsToText({ record, missingData });
+
+    return {
+      objectType,
+      missingData,
+      sendData,
+    };
+  }
+
+  if (objectType === 'location') {
+    const { sendData } = recordsToLocation({ record, missingData });
+
+    return {
+      objectType,
+      missingData,
+      sendData,
+    };
+  }
+
+  if (objectType === 'list') {
+    const { sendData } = recordsToList({ record, missingData });
+
+    return {
+      objectType,
+      missingData,
+      sendData,
+    };
+  }
+
+  if (objectType === 'commerce') {
+    const { sendData } = recordsToCommerce({ record, missingData });
+
+    return {
+      objectType,
+      missingData,
+      sendData,
+    };
+  }
+
+  return {
+    objectType,
+    missingData,
+    sendData: null,
   };
 };

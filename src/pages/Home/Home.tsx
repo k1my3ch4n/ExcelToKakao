@@ -1,14 +1,6 @@
 import { useRef, useState } from 'react';
 import styles from './Home.module.scss';
-import {
-  ExcelRecord,
-  excelFileToRecords,
-  recordsToText,
-  recordsToLocation,
-  recordsToFeed,
-  recordsToList,
-  recordsToCommerce,
-} from '@utils/excelUtil';
+import { ExcelRecord, excelFileToRecords, recordsToSendData } from '@utils/excelUtil';
 
 import Header from './Header';
 import Footer from './Footer';
@@ -58,41 +50,15 @@ const Home = () => {
     }
 
     const record = await excelFileToRecords(file);
-    // todo : objectType 이 없는 경우 추가 예정
-    const objectType = record['objectType'] as MessageType;
 
-    // todo : sendData 를 만드는 util을 합친 util이 필요
-    if (objectType === 'feed') {
-      const { sendData } = recordsToFeed(record);
-
-      setSendData(sendData);
-    }
-
-    if (objectType === 'text') {
-      const { sendData } = recordsToText(record);
-
-      setSendData(sendData);
-    }
-
-    if (objectType === 'location') {
-      const { sendData } = recordsToLocation(record);
-
-      setSendData(sendData);
-    }
-
-    if (objectType === 'list') {
-      const { sendData } = recordsToList(record);
-
-      setSendData(sendData);
-    }
-
-    if (objectType === 'commerce') {
-      const { sendData } = recordsToCommerce(record);
-
-      setSendData(sendData);
-    }
+    const {
+      objectType,
+      sendData,
+      // missingData,
+    } = recordsToSendData(record);
 
     setObjectType(objectType);
+    setSendData(sendData);
     setRecord(record);
 
     setFile(file);
