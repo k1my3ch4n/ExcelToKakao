@@ -81,129 +81,6 @@ export const recordsToSendData = ({
 }) => {
   let sendData = {};
 
-  if (objectType === 'feed') {
-    sendData = {
-      objectType, // 필수
-      content: {
-        title: record['content_title'], // 필수 아님 . a 중 1개 필요
-        description: record['content_description'], // 필수 아님 . a 중 1개 필요
-        imageUrl: record['content_image_url'], // 필수 아님 . a 중 1개 필요
-        link: {
-          webUrl: record['content_web_url'], // 필수 아님 . b 중 1개 필요
-          mobileWebUrl: record['content_mobile_web_url'], // 필수 아님 . b 중 1개 필요
-        },
-      },
-      itemContent: {
-        // 필수 아님
-        profileText: record['content_title'],
-        profileImageUrl: record['content_image_url'],
-        titleImageText: record['content_title'],
-        titleImageUrl: record['content_image_url'],
-        titleImageCategory: record['content_description'],
-        items: [
-          {
-            item: record['content_title'],
-            itemOp: '20000',
-          },
-          {
-            item: record['content_title'],
-            itemOp: '20000',
-          },
-          {
-            item: record['content_title'],
-            itemOp: '20000',
-          },
-        ],
-        sum: '20000',
-        sumOp: '20000',
-      },
-      social: {
-        // 필수 아님 , 이 중 3개만 사용 ( 우선순위는 위부터 아래 순 )
-        likeCount: 999,
-        commentCount: 999,
-        sharedCount: 999,
-        viewCount: 999,
-        subscriberCount: 999,
-      },
-      button_title: 'buttonTitle', // 버튼 이름 변경
-      buttons: [
-        // 버튼이 여러개인 경우 ( 최대 2개 )
-        {
-          title: 'buttonTitle1',
-          link: {
-            webUrl: record['content_web_url'],
-            mobileWebUrl: record['content_mobile_web_url'],
-          },
-        },
-        {
-          title: 'buttonTitle2',
-          link: {
-            webUrl: record['content_web_url'],
-            mobileWebUrl: record['content_mobile_web_url'],
-          },
-        },
-      ],
-    };
-  }
-
-  if (objectType === 'list') {
-    sendData = {
-      objectType,
-      headerTitle: record['header_title'],
-      headerLink: {
-        webUrl: record['header_web_url'],
-        mobileWebUrl: record['header_mobile_web_url'],
-      },
-      contents: [
-        {
-          title: record['content_title1'],
-          description: record['content_description1'],
-          imageUrl: record['content_image_url1'],
-          link: {
-            webUrl: record['content_web_url1'],
-            mobileWebUrl: record['content_mobile_web_url1'],
-          },
-        },
-        {
-          title: record['content_title2'],
-          description: record['content_description2'],
-          imageUrl: record['content_image_url2'],
-          link: {
-            webUrl: record['content_web_url2'],
-            mobileWebUrl: record['content_mobile_web_url2'],
-          },
-        },
-        {
-          title: record['content_title3'],
-          description: record['content_description3'],
-          imageUrl: record['content_image_url3'],
-          link: {
-            webUrl: record['content_web_url3'],
-            mobileWebUrl: record['content_mobile_web_url3'],
-          },
-        },
-      ],
-      button_title: 'buttonTitle', // 버튼 이름 변경
-      buttons: [
-        // 버튼이 여러개인 경우 ( 최대 2개 )
-        {
-          title: 'buttonTitle1',
-          link: {
-            webUrl: record['content_web_url'],
-            mobileWebUrl: record['content_mobile_web_url'],
-          },
-        },
-        {
-          title: 'buttonTitle2',
-          link: {
-            webUrl: record['content_web_url'],
-            mobileWebUrl: record['content_mobile_web_url'],
-          },
-        },
-      ],
-    };
-  }
-
   if (objectType === 'commerce') {
     sendData = {
       objectType,
@@ -681,4 +558,225 @@ export const recordsToFeed = (record: ExcelRecord) => {
 
 export const recordsToList = (record: ExcelRecord) => {
   const missingData = new Set<string>();
+
+  // ? objectType
+  const objectType = record['objectType'] as MessageType;
+
+  // ? headerTitle 필수값
+  const headerTitle = record['header_title'];
+
+  // ? link 값 확인
+  const headerLink = checkLinkData({ record, missingData });
+
+  // ? button 값 확인
+  const buttonsData = checkButtonsData(record);
+
+  // ? contents 값 확인
+  const contents = [];
+
+  const title1 = record['content_title1'];
+  const description1 = record['content_description1'];
+  const imageUrl1 = record['content_image_url1'];
+  const webLink1 = record['content_web_url1'];
+  const mobileWebLink1 = record['content_mobile_web_url1'];
+
+  const hasLink1 = !!webLink1 || !!mobileWebLink1;
+  const hasContentData1 = (!!title1 || !!description1 || !!imageUrl1) && hasLink1;
+
+  const title2 = record['content_title2'];
+  const description2 = record['content_description2'];
+  const imageUrl2 = record['content_image_url2'];
+  const webLink2 = record['content_web_url2'];
+  const mobileWebLink2 = record['content_mobile_web_url2'];
+
+  const hasLink2 = !!webLink2 || !!mobileWebLink2;
+  const hasContentData2 = (!!title2 || !!description2 || !!imageUrl2) && hasLink2;
+
+  const title3 = record['content_title3'];
+  const description3 = record['content_description3'];
+  const imageUrl3 = record['content_image_url3'];
+  const webLink3 = record['content_web_url3'];
+  const mobileWebLink3 = record['content_mobile_web_url3'];
+
+  const hasLink3 = !!webLink3 || !!mobileWebLink3;
+  const hasContentData3 = (!!title3 || !!description3 || !!imageUrl3) && hasLink3;
+
+  // todo : checkContentData 재사용 방안 고민
+  if (hasContentData1) {
+    const linkData = {} as ILinkData;
+
+    if (webLink1) {
+      linkData['webUrl'] = webLink1;
+    }
+
+    if (mobileWebLink1) {
+      linkData['mobileWebUrl'] = mobileWebLink1;
+    }
+
+    const contentData = {
+      link: linkData,
+    } as IContentData;
+
+    if (!!title1) {
+      contentData['title'] = title1;
+    }
+
+    if (!!description1) {
+      contentData['description'] = description1;
+    }
+
+    if (!!imageUrl1) {
+      contentData['imageUrl'] = imageUrl1;
+    }
+
+    contents.push(contentData);
+  }
+
+  if (hasContentData2) {
+    const linkData = {} as ILinkData;
+
+    if (webLink2) {
+      linkData['webUrl'] = webLink2;
+    }
+
+    if (mobileWebLink2) {
+      linkData['mobileWebUrl'] = mobileWebLink2;
+    }
+
+    const contentData = {
+      link: linkData,
+    } as IContentData;
+
+    if (!!title2) {
+      contentData['title'] = title2;
+    }
+
+    if (!!description2) {
+      contentData['description'] = description2;
+    }
+
+    if (!!imageUrl2) {
+      contentData['imageUrl'] = imageUrl2;
+    }
+
+    contents.push(contentData);
+  }
+
+  if (hasContentData3) {
+    const linkData = {} as ILinkData;
+
+    if (webLink3) {
+      linkData['webUrl'] = webLink3;
+    }
+
+    if (mobileWebLink3) {
+      linkData['mobileWebUrl'] = mobileWebLink3;
+    }
+
+    const contentData = {
+      link: linkData,
+    } as IContentData;
+
+    if (!!title3) {
+      contentData['title'] = title3;
+    }
+
+    if (!!description3) {
+      contentData['description'] = description3;
+    }
+
+    if (!!imageUrl3) {
+      contentData['imageUrl'] = imageUrl3;
+    }
+
+    contents.push(contentData);
+  }
+
+  if (!!headerTitle) {
+    missingData.add('headerTitle');
+  }
+
+  if (contents.length < 2) {
+    missingData.add('contents');
+  }
+
+  const sendData: any = {
+    objectType,
+    headerTitle,
+    link: headerLink,
+    ...buttonsData,
+    contents,
+  };
+
+  return {
+    sendData,
+    missingData,
+  };
+};
+
+export const recordsToCommerce = (record: ExcelRecord) => {
+  const missingData = new Set<string>();
+
+  // ? objectType
+  const objectType = record['objectType'] as MessageType;
+
+  // ? content 확인
+  const content = checkContentData({ record, missingData });
+
+  // ? button 값 확인
+  const buttonsData = checkButtonsData(record);
+
+  // todo : 숫자 정규식 검사 필요
+
+  const productName = record['product_name']; // 필수 아님
+  const regularPrice = record['regular_price']; // 필수
+  const discountPrice = record['discount_price']; // 필수 아님
+  const discountRate = record['discount_rate']; // 필수 아님
+  const fixedDiscountPrice = record['fixed_discount_price']; // 필수 아님
+  const currency_unit = record['currency_unit']; // 필수 아님
+  const currencyUnitPosition = record['currency_unit_position']; // 필수 아님
+
+  if (!!regularPrice) {
+    missingData.add('regularPrice');
+  }
+
+  const commerce: any = {
+    regularPrice,
+  };
+
+  if (!!productName) {
+    commerce['productName'] = productName;
+  }
+
+  if (!!discountPrice) {
+    commerce['discountPrice'] = discountPrice;
+  }
+
+  if (!!discountRate) {
+    commerce['discountRate'] = discountRate;
+  }
+
+  if (!!fixedDiscountPrice) {
+    commerce['fixedDiscountPrice'] = fixedDiscountPrice;
+  }
+
+  if (!!currency_unit) {
+    commerce['currency_unit'] = currency_unit;
+  }
+
+  if (!!currencyUnitPosition) {
+    commerce['currencyUnitPosition'] = currencyUnitPosition;
+  }
+
+  const sendData: any = {
+    objectType,
+    content,
+    commerce,
+    ...buttonsData,
+  };
+
+  return {
+    sendData,
+    missingData,
+  };
 };

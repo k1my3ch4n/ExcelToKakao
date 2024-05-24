@@ -6,6 +6,8 @@ import {
   recordsToText,
   recordsToLocation,
   recordsToFeed,
+  recordsToList,
+  recordsToCommerce,
 } from '@utils/excelUtil';
 
 import Header from './Header';
@@ -59,6 +61,7 @@ const Home = () => {
     // todo : objectType 이 없는 경우 추가 예정
     const objectType = record['objectType'] as MessageType;
 
+    // todo : sendData 를 만드는 util을 합친 util이 필요
     if (objectType === 'feed') {
       const { sendData } = recordsToFeed(record);
 
@@ -77,7 +80,17 @@ const Home = () => {
       setSendData(sendData);
     }
 
-    // const sendData = recordsToSendData({ objectType, record });
+    if (objectType === 'list') {
+      const { sendData } = recordsToList(record);
+
+      setSendData(sendData);
+    }
+
+    if (objectType === 'commerce') {
+      const { sendData } = recordsToCommerce(record);
+
+      setSendData(sendData);
+    }
 
     setObjectType(objectType);
     setRecord(record);
