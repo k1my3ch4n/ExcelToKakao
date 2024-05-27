@@ -1,30 +1,34 @@
-import ContentButtons from '../ContentButtons';
+import { ILocationData } from '@interface/excel';
+import ContentButtons from '../NewContentButtons';
 import styles from './Location.module.scss';
-import { ExcelRecord, parsingButtonUtil } from '@utils/excelUtil';
 
-const Location = ({ record }: { record: ExcelRecord }) => {
-  if (!record) {
-    return null;
-  }
+const Location = ({ sendData }: { sendData: ILocationData }) => {
+  const {
+    content: { title, description, imageUrl, link },
+    buttonTitle,
+    buttons,
+  } = sendData;
 
-  const imageUrl = record['content_image_url'];
-  const title = record['content_title'];
-  const description = record['content_description'];
+  // todo : button 기본값 수정 예정 . location 은 기본 2개이기 때문.
+  const hasButtons = !!buttons && buttons?.length > 0;
 
-  const buttons = parsingButtonUtil(record);
-
-  // todo : 버튼이 기본으로 2개인 경우임 . 수정 필요
+  // todo : normalButton 은 내부로 갈 수 도 있을 것 같은데 ..
+  const normalButton = {
+    title: buttonTitle ?? '자세히 보기',
+    link,
+  };
 
   return (
     <>
-      <div className={styles.image}>
-        {imageUrl ? <img src={imageUrl}></img> : '이미지가 없습니다.'}
-      </div>
+      {imageUrl && (
+        <div className={styles.image}>
+          <img src={imageUrl}></img>
+        </div>
+      )}
       <div className={styles.detail}>
-        <div className={styles.title}>{title ?? 'title 이 없습니다.'}</div>
-        <div className={styles.description}>{description ?? 'description이 없습니다.'}</div>
-
-        <ContentButtons buttons={buttons} />
+        {title && <div className={styles.title}>{title}</div>}
+        {description && <div className={styles.description}>{description}</div>}
+        <ContentButtons buttons={hasButtons ? buttons : [normalButton]} />
       </div>
     </>
   );

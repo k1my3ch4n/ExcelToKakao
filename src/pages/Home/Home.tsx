@@ -67,8 +67,6 @@ const Home = () => {
     setFile(null);
   };
 
-  console.log('sendData : ', sendData);
-
   return (
     <div className={styles.wrapper}>
       <Header />
@@ -78,11 +76,15 @@ const Home = () => {
           {objectType === 'feed' && <Feed record={record} />}
           {objectType === 'list' && <List record={record} />}
           {objectType === 'commerce' && <Commerce record={record} />}
-          {objectType === 'location' && <Location record={record} />}
         </Wrapper>
       )}
 
-      {sendData && <Wrapper>{objectType === 'text' && <Text sendData={sendData} />}</Wrapper>}
+      {sendData && (
+        <Wrapper>
+          {objectType === 'text' && <Text sendData={sendData} />}
+          {objectType === 'location' && <Location sendData={sendData} />}
+        </Wrapper>
+      )}
 
       <Footer
         file={file}
