@@ -1,6 +1,7 @@
 import { IFeedData } from '@interface/excel';
 import ContentButtons from '../NewContentButtons';
 import styles from './Feed.module.scss';
+import ItemContents from './ItemContents';
 
 const Feed = ({ sendData }: { sendData: IFeedData }) => {
   const {
@@ -25,34 +26,7 @@ const Feed = ({ sendData }: { sendData: IFeedData }) => {
         </div>
       )}
       <div className={styles.detail}>
-        <div>
-          {itemContent?.profileImageUrl && (
-            <div>
-              <img src={itemContent?.profileImageUrl}></img>
-            </div>
-          )}
-          {itemContent?.profileText && (
-            <div className={styles.title}>{itemContent?.profileText}</div>
-          )}
-        </div>
-        <div>
-          {itemContent?.titleImageText && (
-            <div className={styles.title}>{itemContent?.titleImageText}</div>
-          )}
-          {itemContent?.titleImageCategory && (
-            <div className={styles.title}>{itemContent?.titleImageCategory}</div>
-          )}
-          {itemContent?.titleImageUrl && (
-            <div>
-              <img src={itemContent?.titleImageUrl}></img>
-            </div>
-          )}
-        </div>
-
-        {/* items */}
-
-        {/* sum */}
-
+        <ItemContents itemContent={itemContent} />
         {title && <div className={styles.title}>{title}</div>}
         {description && <div className={styles.description}>{description}</div>}
         {/* social 추가해야함 */}

@@ -1,0 +1,41 @@
+.profile {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+
+  & > img {
+    border-radius: 20px;
+    width: 20%;
+  }
+
+  .profileText {
+    font-size: 20px;
+    padding-left: 10px;
+  }
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .text {
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  .imageCategory {
+    color: lightgray;
+  }
+
+  & > img {
+    border-radius: 2px;
+    width: 30%;
+  }
+}
+
+.line {
+  background-color: lightgray;
+  height: 1px;
+  margin: 10px 0;
+}
