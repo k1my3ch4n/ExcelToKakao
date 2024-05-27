@@ -6,6 +6,7 @@ import {
   IItemContent,
   IItems,
   ILinkData,
+  IListData,
   ILocationData,
   ITextData,
   MessageType,
@@ -648,10 +649,10 @@ export const recordsToList = ({
     missingData.add('contents');
   }
 
-  const sendData: any = {
+  const sendData: IListData = {
     objectType,
     headerTitle,
-    link: headerLink,
+    headerLink,
     ...buttonsData,
     contents,
   };
@@ -679,7 +680,6 @@ export const recordsToCommerce = ({
   const buttonsData = checkButtonsData(record);
 
   // todo : 숫자 정규식 검사 필요
-
   const productName = record['product_name']; // 필수 아님
   const regularPrice = record['regular_price']; // 필수
   const discountPrice = record['discount_price']; // 필수 아님

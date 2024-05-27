@@ -71,18 +71,14 @@ const Home = () => {
     <div className={styles.wrapper}>
       <Header />
 
-      {record && (
-        <Wrapper>
-          {objectType === 'list' && <List record={record} />}
-          {objectType === 'commerce' && <Commerce record={record} />}
-        </Wrapper>
-      )}
+      {record && <Wrapper>{objectType === 'commerce' && <Commerce record={record} />}</Wrapper>}
 
       {sendData && (
         <Wrapper>
           {objectType === 'feed' && <Feed sendData={sendData} />}
           {objectType === 'text' && <Text sendData={sendData} />}
           {objectType === 'location' && <Location sendData={sendData} />}
+          {objectType === 'list' && <List sendData={sendData} />}
         </Wrapper>
       )}
 

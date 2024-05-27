@@ -64,3 +64,12 @@ export interface IFeedData {
   buttonTitle?: string;
   buttons?: IButtonData[];
 }
+
+export interface IListData {
+  objectType: MessageType;
+  headerTitle: string | null;
+  headerLink: ILinkData;
+  contents: IContentData[];
+  buttonTitle?: string;
+  buttons?: IButtonData[];
+}
