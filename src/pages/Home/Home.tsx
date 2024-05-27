@@ -73,7 +73,6 @@ const Home = () => {
 
       {record && (
         <Wrapper>
-          {objectType === 'feed' && <Feed record={record} />}
           {objectType === 'list' && <List record={record} />}
           {objectType === 'commerce' && <Commerce record={record} />}
         </Wrapper>
@@ -81,6 +80,7 @@ const Home = () => {
 
       {sendData && (
         <Wrapper>
+          {objectType === 'feed' && <Feed sendData={sendData} />}
           {objectType === 'text' && <Text sendData={sendData} />}
           {objectType === 'location' && <Location sendData={sendData} />}
         </Wrapper>

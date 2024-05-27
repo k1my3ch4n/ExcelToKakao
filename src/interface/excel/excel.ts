@@ -22,6 +22,22 @@ export interface IContentData {
   link: ILinkData;
 }
 
+export interface IItems {
+  item: string;
+  itemOp: string;
+}
+
+export interface IItemContent {
+  profileText?: string;
+  profileImageUrl?: string;
+  titleImageText?: string;
+  titleImageUrl?: string;
+  titleImageCategory?: string;
+  items?: IItems[];
+  sum?: string;
+  sumOp?: string;
+}
+
 // ? record interface
 
 export interface ITextData {
@@ -37,6 +53,14 @@ export interface ILocationData {
   address: string | null;
   addressTitle?: string;
   content: IContentData;
+  buttonTitle?: string;
+  buttons?: IButtonData[];
+}
+
+export interface IFeedData {
+  objectType: MessageType;
+  content: IContentData;
+  itemContent?: IItemContent;
   buttonTitle?: string;
   buttons?: IButtonData[];
 }

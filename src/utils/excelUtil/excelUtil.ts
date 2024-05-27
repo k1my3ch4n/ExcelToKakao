@@ -2,6 +2,9 @@ import {
   IButtonData,
   IButtonsData,
   IContentData,
+  IFeedData,
+  IItemContent,
+  IItems,
   ILinkData,
   ILocationData,
   ITextData,
@@ -408,7 +411,7 @@ export const recordsToFeed = ({
   const titleImageCategory = record['title_image_category'];
 
   // todo : 5개까지 존재할 수 있는데 , 일일히 해야하는 불편함이 있음. 이를 한번에 해결할 수 있는지 ?
-  const itemData = [];
+  const itemData: IItems[] = [];
 
   const item1 = record['item1'];
   const itemOp1 = record['item_op1'];
@@ -449,13 +452,13 @@ export const recordsToFeed = ({
   const sum = record['sum'];
   const sumOp = record['sum_op'];
 
-  const sendData: any = {
+  const sendData: IFeedData = {
     objectType,
     content: contentData,
     ...buttonsData,
   };
 
-  const itemContent: any = {};
+  const itemContent: IItemContent = {};
 
   if (!!profileText) {
     itemContent['profileText'] = profileText;
