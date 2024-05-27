@@ -34,6 +34,31 @@
   }
 }
 
+.items {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+
+  .item {
+    color: lightgray;
+  }
+}
+
+.sums {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+
+  .sum {
+    color: lightgray;
+  }
+
+  .sumOp {
+    font-weight: 600;
+    font-size: 18px;
+  }
+}
+
 .line {
   background-color: lightgray;
   height: 1px;
