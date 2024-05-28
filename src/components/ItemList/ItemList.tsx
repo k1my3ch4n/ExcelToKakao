@@ -5,9 +5,9 @@ const ItemList = ({
   description = 'description 이 존재하지 않습니다.',
   imageSrc,
 }: {
-  title: string | null;
-  description: string | null;
-  imageSrc: string | null;
+  title?: string;
+  description?: string;
+  imageSrc?: string;
 }) => {
   return (
     <div className={styles.wrapper}>
@@ -16,6 +16,7 @@ const ItemList = ({
         <div className={styles.description}>{description}</div>
       </div>
       {imageSrc && (
+        // imageUrl 수정 예정
         <div className={styles.image}>
           <img src={imageSrc} />
         </div>

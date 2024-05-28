@@ -1,46 +1,27 @@
-import ContentButtons from '../ContentButtons';
+import { IContentData, IListData } from '@interface/excel';
+import ContentButtons from '../NewContentButtons';
 import ItemList from '../ItemList';
 import styles from './List.module.scss';
-import { ExcelRecord, parsingButtonUtil } from '@utils/excelUtil';
 
-const List = ({ record }: { record: ExcelRecord }) => {
-  if (!record) {
-    return null;
-  }
+const List = ({ sendData }: { sendData: IListData }) => {
+  const { headerTitle, headerLink, contents, buttonTitle, buttons } = sendData;
 
-  const headerTitle = record['header_title'] as string;
-  const contentTitle1 = record['content_title1'];
-  const contentDescription1 = record['content_description1'];
-  const contentImage1 = record['content_image_url1'];
+  const hasButtons = !!buttons && buttons?.length > 0;
 
-  const contentTitle2 = record['content_title2'];
-  const contentDescription2 = record['content_description2'];
-  const contentImage2 = record['content_image_url2'];
-
-  const contentTitle3 = record['content_title3'];
-  const contentDescription3 = record['content_description3'];
-  const contentImage3 = record['content_image_url3'];
-
-  const buttons = parsingButtonUtil(record);
-
-  // todo : 필수값과 아닌값 분기 설정
+  const normalButton = {
+    title: buttonTitle ?? '자세히 보기',
+    link: headerLink,
+  };
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.title}>{headerTitle ?? '메인 타이틀이 없습니다.'}</div>
-      <ItemList title={contentTitle1} description={contentDescription1} imageSrc={contentImage1} />
-      <ItemList title={contentTitle2} description={contentDescription2} imageSrc={contentImage2} />
-
-      {/* 3번째 데이터는 선택 */}
-      {(contentTitle3 || contentDescription3 || contentImage3) && (
-        <ItemList
-          title={contentTitle3}
-          description={contentDescription3}
-          imageSrc={contentImage3}
-        />
-      )}
-
-      <ContentButtons buttons={buttons} />
+      <div className={styles.line} />
+      {contents.map(({ title, description, imageUrl }: IContentData) => (
+        <ItemList title={title} description={description} imageSrc={imageUrl} />
+      ))}
+      <div className={styles.line} />
+      <ContentButtons buttons={hasButtons ? buttons : [normalButton]} />
     </div>
   );
 };
