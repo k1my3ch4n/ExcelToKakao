@@ -8,15 +8,36 @@
 .detail {
   padding: 10px;
 
-  div + div {
-    margin-top: 10px;
+  .title {
+    margin-bottom: 10px;
   }
 
   .price {
-    font-weight: 600;
+    display: flex;
+    align-items: baseline;
+
+    .finalPrice {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+
+    .beforePrice {
+      font-size: 18px;
+      margin-right: 10px;
+    }
+
+    .discount {
+      color: red;
+    }
   }
 
   .description {
     color: lightgray;
   }
+}
+
+.line {
+  background-color: lightgray;
+  height: 1px;
+  margin: 10px 0;
 }

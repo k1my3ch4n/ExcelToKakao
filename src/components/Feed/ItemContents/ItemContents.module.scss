@@ -1,0 +1,68 @@
+.profile {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+
+  & > img {
+    border-radius: 20px;
+    width: 20%;
+    padding-right: 10px;
+  }
+
+  .profileText {
+    font-size: 20px;
+  }
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .text {
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  .imageCategory {
+    color: lightgray;
+  }
+
+  & > img {
+    border-radius: 2px;
+    width: 30%;
+  }
+}
+
+.items {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+
+  .item {
+    color: lightgray;
+  }
+}
+
+.sums {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+
+  .sum {
+    color: lightgray;
+  }
+
+  .sumOp {
+    font-weight: 600;
+    font-size: 18px;
+  }
+}
+
+.line {
+  background-color: lightgray;
+  height: 1px;
+  margin: 10px 0;
+}

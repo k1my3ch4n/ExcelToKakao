@@ -1,30 +1,65 @@
+import { ICommerceData } from '@interface/excel';
 import ContentButtons from '../ContentButtons';
 import styles from './Commerce.module.scss';
-import { ExcelRecord, parsingButtonUtil } from '@utils/excelUtil';
 
-const Commerce = ({ record }: { record: ExcelRecord }) => {
-  if (!record) {
-    return null;
-  }
+const Commerce = ({ sendData }: { sendData: ICommerceData }) => {
+  const {
+    commerce: {
+      productName,
+      regularPrice,
+      discountPrice,
+      discountRate,
+      fixedDiscountPrice,
+      currencyUnit,
+      currencyUnitPosition,
+    },
+    content: { title, description, link, imageUrl },
+    buttonTitle,
+    buttons,
+  } = sendData;
 
-  const imageUrl = record['content_image_url'] as string;
-  const description = record['content_description'] as string;
-  const productName = record['product_name'] as string;
-  const regularPrice = record['regular_price'] as string;
+  const hasButtons = !!buttons && buttons?.length > 0;
 
-  const buttons = parsingButtonUtil(record);
+  const normalButton = {
+    title: buttonTitle ?? '자세히 보기',
+    link,
+  };
 
   return (
     <>
-      <div className={styles.image}>
-        {imageUrl ? <img src={imageUrl}></img> : '이미지가 없습니다.'}
-      </div>
+      {imageUrl && (
+        <div className={styles.image}>
+          <img src={imageUrl}></img>
+        </div>
+      )}
       <div className={styles.detail}>
-        <div className={styles.title}>{productName}</div>
-        <div className={styles.price}>{Number(regularPrice).toLocaleString()}원</div>
-        <div className={styles.description}>{description}</div>
+        {productName && <p className={styles.title}>{productName}</p>}
 
-        <ContentButtons buttons={buttons} />
+        {/* todo : price 분리 */}
+
+        <div className={styles.price}>
+          <p className={styles.finalPrice}>
+            {(currencyUnitPosition === 1 && currencyUnit) ?? '원'}
+            {discountPrice ? discountPrice.toLocaleString() : regularPrice?.toLocaleString()}
+            {(currencyUnitPosition === 0 && currencyUnit) ?? '원'}
+          </p>
+
+          {discountPrice && !!regularPrice && (
+            <s className={styles.beforePrice}>{regularPrice.toLocaleString()}</s>
+          )}
+          <p className={styles.discount}>
+            {discountRate
+              ? `${discountRate}%`
+              : fixedDiscountPrice && `${fixedDiscountPrice.toLocaleString()}↓`}
+          </p>
+        </div>
+
+        <div className={styles.line} />
+        {title && <p className={styles.description}>{title}</p>}
+
+        {!title && description && <p className={styles.description}>{description}</p>}
+
+        <ContentButtons buttons={hasButtons ? buttons : [normalButton]} />
       </div>
     </>
   );

@@ -6,4 +6,12 @@
     font-weight: 600;
     font-size: 20px;
   }
+
+  .line {
+    position: relative;
+    width: calc(100% + 20px);
+    left: -10px;
+    background-color: lightgray;
+    height: 1px;
+  }
 }

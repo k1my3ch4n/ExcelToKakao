@@ -1,29 +1,36 @@
+import { IFeedData } from '@interface/excel';
 import ContentButtons from '../ContentButtons';
 import styles from './Feed.module.scss';
-import { ExcelRecord, parsingButtonUtil } from '@utils/excelUtil';
+import ItemContents from './ItemContents';
 
-const Feed = ({ record }: { record: ExcelRecord }) => {
-  if (!record) {
-    return null;
-  }
+const Feed = ({ sendData }: { sendData: IFeedData }) => {
+  const {
+    content: { imageUrl, title, description, link },
+    itemContent,
+    buttonTitle,
+    buttons,
+  } = sendData;
 
-  const imageUrl = record['content_image_url'] as string;
-  const title = record['content_title'] as string;
-  const description = record['content_description'] as string;
+  const hasButtons = !!buttons && buttons?.length > 0;
 
-  const buttons = parsingButtonUtil(record);
+  const normalButton = {
+    title: buttonTitle ?? '자세히 보기',
+    link,
+  };
 
   return (
     <>
-      <div className={styles.image}>
-        {imageUrl ? <img src={imageUrl}></img> : '이미지가 없습니다.'}
-      </div>
+      {imageUrl && (
+        <div className={styles.image}>
+          <img src={imageUrl}></img>
+        </div>
+      )}
       <div className={styles.detail}>
-        <div className={styles.title}>{title ?? 'title이 없습니다.'}</div>
-        {/* itemContent 추가해야함 */}
-        <div className={styles.description}>{description ?? 'description이 없습니다.'}</div>
+        <ItemContents itemContent={itemContent} />
+        {title && <div className={styles.title}>{title}</div>}
+        {description && <div className={styles.description}>{description}</div>}
         {/* social 추가해야함 */}
-        <ContentButtons buttons={buttons} />
+        <ContentButtons buttons={hasButtons ? buttons : [normalButton]} />
       </div>
     </>
   );

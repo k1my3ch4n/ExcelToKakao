@@ -8,15 +8,13 @@
 .detail {
   padding: 10px;
 
-  div + div {
-    margin-top: 10px;
-  }
-
   .title {
     font-weight: 600;
+    margin-bottom: 10px;
   }
 
   .description {
     color: lightgray;
+    margin-bottom: 10px;
   }
 }
