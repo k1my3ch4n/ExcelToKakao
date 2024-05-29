@@ -38,6 +38,16 @@ export interface IItemContent {
   sumOp?: string;
 }
 
+export interface ICommerce {
+  productName?: string;
+  regularPrice: number | null;
+  discountPrice?: number;
+  discountRate?: number;
+  fixedDiscountPrice?: number;
+  currencyUnit?: string;
+  currencyUnitPosition: number;
+}
+
 // ? record interface
 
 export interface ITextData {
@@ -70,6 +80,14 @@ export interface IListData {
   headerTitle: string | null;
   headerLink: ILinkData;
   contents: IContentData[];
+  buttonTitle?: string;
+  buttons?: IButtonData[];
+}
+
+export interface ICommerceData {
+  objectType: MessageType;
+  content: IContentData;
+  commerce: ICommerce;
   buttonTitle?: string;
   buttons?: IButtonData[];
 }

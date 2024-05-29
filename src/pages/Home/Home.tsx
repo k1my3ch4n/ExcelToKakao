@@ -53,6 +53,8 @@ const Home = () => {
 
     const { objectType, sendData, missingData } = recordsToSendData(record);
 
+    console.log(sendData);
+
     setObjectType(objectType);
     setMissingData(missingData);
     setSendData(sendData);
@@ -70,15 +72,13 @@ const Home = () => {
   return (
     <div className={styles.wrapper}>
       <Header />
-
-      {record && <Wrapper>{objectType === 'commerce' && <Commerce record={record} />}</Wrapper>}
-
       {sendData && (
         <Wrapper>
           {objectType === 'feed' && <Feed sendData={sendData} />}
           {objectType === 'text' && <Text sendData={sendData} />}
           {objectType === 'location' && <Location sendData={sendData} />}
           {objectType === 'list' && <List sendData={sendData} />}
+          {objectType === 'commerce' && <Commerce sendData={sendData} />}
         </Wrapper>
       )}
 

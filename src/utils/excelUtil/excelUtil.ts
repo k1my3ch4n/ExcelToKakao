@@ -1,6 +1,8 @@
 import {
   IButtonData,
   IButtonsData,
+  ICommerce,
+  ICommerceData,
   IContentData,
   IFeedData,
   IItemContent,
@@ -19,6 +21,8 @@ export interface ButtonsType {
   buttonTitle: string;
   buttonLink: string;
 }
+
+const checkIsNumber = /^[0-9]*$/;
 
 const trimColumns = (records: ExcelRecord): ExcelRecord => {
   return Object.entries(records).reduce<ExcelRecord>((acc, [key, value]) => {
@@ -74,107 +78,6 @@ export const excelFileToRecords = async (excelFile: File) => {
     console.error(e);
     throw Error('excelFileToRecords error');
   }
-};
-
-export const parsingButtonUtil = (record: ExcelRecord): ButtonsType[] => {
-  const singleButtonTitle = record['button_title'];
-  const singleButtonLink = record['content_web_url'];
-  const singleButtonMobileLink = record['content_mobile_web_url'];
-
-  const buttonTitle1 = record['buttons_title1'];
-  const buttonTitle2 = record['buttons_title2'];
-
-  const buttonLink1 = record['buttons_web_url1'];
-  const buttonLink2 = record['buttons_web_url2'];
-
-  const buttonMobileLink1 = record['buttons_mobile_web_url1'];
-  const buttonMobileLink2 = record['buttons_mobile_web_url2'];
-
-  // ? 버튼 타이틀이 존재하고 , 둘 중 한 개의 링크가 존재하는 경우 버튼이 있다고 간주
-  const hasButton1 = !!buttonTitle1 && (!!buttonLink1 || !!buttonMobileLink1);
-  const hasButton2 = !!buttonTitle2 && (!!buttonLink2 || !!buttonMobileLink2);
-
-  // ? 버튼 두개가 존재하는 경우 , 여러 버튼이 있는 것으로 간주
-  const hasManyButtons = hasButton1 && hasButton2;
-
-  // ? 버튼 array return
-  if (hasManyButtons) {
-    return [
-      {
-        buttonTitle: buttonTitle1,
-        buttonLink: buttonLink1 ?? buttonMobileLink1 ?? '',
-      },
-      {
-        buttonTitle: buttonTitle2,
-        buttonLink: buttonLink2 ?? buttonMobileLink2 ?? '',
-      },
-    ];
-  }
-
-  if (hasButton1) {
-    return [
-      {
-        buttonTitle: buttonTitle1,
-        buttonLink: buttonLink1 ?? buttonMobileLink1 ?? '',
-      },
-    ];
-  }
-
-  if (hasButton2) {
-    return [
-      {
-        buttonTitle: buttonTitle2,
-        buttonLink: buttonLink2 ?? buttonMobileLink2 ?? '',
-      },
-    ];
-  }
-
-  return [
-    {
-      buttonTitle: singleButtonTitle ?? '',
-      buttonLink: singleButtonLink ?? singleButtonMobileLink ?? '',
-    },
-  ];
-};
-
-export const parsingContentUtil = (record: ExcelRecord) => {
-  const contentTitle = record['content_title'];
-  const contentDescription = record['content_description'];
-  const contentImageUrl = record['content_image_url'];
-  const contentWebLink = record['content_web_url'];
-  const contentMobileWebLink = record['content_mobile_web_url'];
-
-  return {
-    contentTitle,
-    contentDescription,
-    contentImageUrl,
-    contentWebLink,
-    contentMobileWebLink,
-  };
-};
-
-export const parsingTextUtil = (record: ExcelRecord) => {
-  const missingRecords = [];
-
-  const text = record['content_text'];
-  const webLink = record['content_web_url'];
-  const mobileWebLink = record['content_mobile_web_url'];
-
-  const buttons = parsingButtonUtil(record);
-
-  if (!text) {
-    missingRecords.push('content_text');
-  }
-
-  if (!webLink && !mobileWebLink) {
-    missingRecords.push('link');
-  }
-
-  return {
-    text,
-    buttons,
-    missingRecords,
-  };
 };
 
 export const checkLinkData = ({
@@ -310,6 +213,57 @@ export const checkContentData = ({
   }
 
   return contentData;
+};
+
+export const checkCommerceData = ({
+  record,
+  missingData,
+}: {
+  record: ExcelRecord;
+  missingData: Set<string>;
+}) => {
+  // todo : 숫자 정규식 검사 필요
+  const productName = record['product_name']; // 필수 아님
+  const regularPrice =
+    !!record['regular_price'] && checkIsNumber.test(record['regular_price'])
+      ? Number(record['regular_price'])
+      : null; // 필수
+  const discountPrice = record['discount_price']; // 필수 아님
+  const discountRate = record['discount_rate']; // 필수 아님
+  const fixedDiscountPrice = record['fixed_discount_price']; // 필수 아님
+  const currencyUnit = record['currency_unit']; // 필수 아님
+  const currencyUnitPosition = record['currency_unit_position']; // 필수 아님
+
+  if (!regularPrice) {
+    missingData.add('regularPrice');
+  }
+
+  const commerceData: ICommerce = {
+    regularPrice,
+    currencyUnitPosition: Number(currencyUnitPosition) === 1 ? 1 : 0,
+  };
+
+  if (!!productName) {
+    commerceData['productName'] = productName;
+  }
+
+  if (!!discountPrice && checkIsNumber.test(discountPrice)) {
+    commerceData['discountPrice'] = Number(discountPrice);
+  }
+
+  if (!!discountRate && checkIsNumber.test(discountRate)) {
+    commerceData['discountRate'] = Number(discountRate);
+  }
+
+  if (!!fixedDiscountPrice && checkIsNumber.test(fixedDiscountPrice)) {
+    commerceData['fixedDiscountPrice'] = Number(fixedDiscountPrice);
+  }
+
+  if (!!currencyUnit) {
+    commerceData['currencyUnit'] = currencyUnit;
+  }
+
+  return commerceData;
 };
 
 export const recordsToText = ({
@@ -673,54 +627,16 @@ export const recordsToCommerce = ({
   // ? objectType
   const objectType = record['objectType'] as MessageType;
 
+  //
+  const commerce = checkCommerceData({ record, missingData });
+
   // ? content 확인
   const content = checkContentData({ record, missingData });
 
   // ? button 값 확인
   const buttonsData = checkButtonsData(record);
 
-  // todo : 숫자 정규식 검사 필요
-  const productName = record['product_name']; // 필수 아님
-  const regularPrice = record['regular_price']; // 필수
-  const discountPrice = record['discount_price']; // 필수 아님
-  const discountRate = record['discount_rate']; // 필수 아님
-  const fixedDiscountPrice = record['fixed_discount_price']; // 필수 아님
-  const currency_unit = record['currency_unit']; // 필수 아님
-  const currencyUnitPosition = record['currency_unit_position']; // 필수 아님
-
-  if (!!regularPrice) {
-    missingData.add('regularPrice');
-  }
-
-  const commerce: any = {
-    regularPrice,
-  };
-
-  if (!!productName) {
-    commerce['productName'] = productName;
-  }
-
-  if (!!discountPrice) {
-    commerce['discountPrice'] = discountPrice;
-  }
-
-  if (!!discountRate) {
-    commerce['discountRate'] = discountRate;
-  }
-
-  if (!!fixedDiscountPrice) {
-    commerce['fixedDiscountPrice'] = fixedDiscountPrice;
-  }
-
-  if (!!currency_unit) {
-    commerce['currency_unit'] = currency_unit;
-  }
-
-  if (!!currencyUnitPosition) {
-    commerce['currencyUnitPosition'] = currencyUnitPosition;
-  }
-
-  const sendData: any = {
+  const sendData: ICommerceData = {
     objectType,
     content,
     commerce,
