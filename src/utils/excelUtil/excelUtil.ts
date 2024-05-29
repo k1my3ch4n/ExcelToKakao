@@ -222,7 +222,6 @@ export const checkCommerceData = ({
   record: ExcelRecord;
   missingData: Set<string>;
 }) => {
-  // todo : 숫자 정규식 검사 필요
   const productName = record['product_name']; // 필수 아님
   const regularPrice =
     !!record['regular_price'] && checkIsNumber.test(record['regular_price'])
