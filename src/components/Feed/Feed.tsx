@@ -1,5 +1,5 @@
 import { IFeedData } from '@interface/excel';
-import ContentButtons from '../NewContentButtons';
+import ContentButtons from '../ContentButtons';
 import styles from './Feed.module.scss';
 import ItemContents from './ItemContents';
 

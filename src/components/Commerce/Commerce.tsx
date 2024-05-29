@@ -1,5 +1,5 @@
 import { ICommerceData } from '@interface/excel';
-import ContentButtons from '../NewContentButtons';
+import ContentButtons from '../ContentButtons';
 import styles from './Commerce.module.scss';
 
 const Commerce = ({ sendData }: { sendData: ICommerceData }) => {

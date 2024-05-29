@@ -1,5 +1,5 @@
 import styles from './Text.module.scss';
-import ContentButtons from '../NewContentButtons';
+import ContentButtons from '../ContentButtons';
 import { ITextData } from '@interface/excel';
 
 const Text = ({ sendData }: { sendData: ITextData }) => {

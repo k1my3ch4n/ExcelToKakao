@@ -1,5 +1,5 @@
 import { ILocationData } from '@interface/excel';
-import ContentButtons from '../NewContentButtons';
+import ContentButtons from '../ContentButtons';
 import styles from './Location.module.scss';
 
 const Location = ({ sendData }: { sendData: ILocationData }) => {

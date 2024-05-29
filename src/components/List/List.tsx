@@ -1,5 +1,5 @@
 import { IContentData, IListData } from '@interface/excel';
-import ContentButtons from '../NewContentButtons';
+import ContentButtons from '../ContentButtons';
 import ItemList from '../ItemList';
 import styles from './List.module.scss';
 
