@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import styles from './Home.module.scss';
-import { ExcelRecord, excelFileToRecords, recordsToSendData } from '@utils/excelUtil';
+import { excelFileToRecords, recordsToSendData } from '@utils/excelUtil';
 
 import Header from './Header';
 import Footer from './Footer';
@@ -10,7 +10,15 @@ import Text from '@components/Text';
 import List from '@components/List';
 import Commerce from '@components/Commerce';
 import Location from '@components/Location';
-import { MessageType } from '@interface/excel';
+import {
+  ICommerce,
+  ICommerceData,
+  IFeedData,
+  IListData,
+  ILocationData,
+  ITextData,
+  MessageType,
+} from '@interface/excel';
 
 export type FileChangeEvent = React.ChangeEvent<HTMLInputElement> & {
   target: EventTarget & { files: FileList };
@@ -21,9 +29,10 @@ const kakao = (window as any).Kakao;
 const Home = () => {
   const [file, setFile] = useState<File | null>(null);
   const [missingData, setMissingData] = useState<Set<string>>();
-  const [record, setRecord] = useState<ExcelRecord | null>(null);
   const [objectType, setObjectType] = useState<MessageType | null>(null);
-  const [sendData, setSendData] = useState<any>(null);
+  const [sendData, setSendData] = useState<
+    ITextData | ILocationData | IFeedData | IListData | ICommerce | null
+  >(null);
 
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -53,38 +62,42 @@ const Home = () => {
 
     const { objectType, sendData, missingData } = recordsToSendData(record);
 
-    console.log(sendData);
-
     setObjectType(objectType);
     setMissingData(missingData);
     setSendData(sendData);
-    setRecord(record);
     setFile(file);
   };
 
   const handleFileReset = () => {
+    setMissingData(undefined);
+    setSendData(null);
     setObjectType(null);
     setSendData(null);
-    setRecord(null);
     setFile(null);
   };
+
+  const hasMissingData = !!missingData && missingData?.size > 0;
 
   return (
     <div className={styles.wrapper}>
       <Header />
+
       {sendData && (
         <Wrapper>
-          {objectType === 'feed' && <Feed sendData={sendData} />}
-          {objectType === 'text' && <Text sendData={sendData} />}
-          {objectType === 'location' && <Location sendData={sendData} />}
-          {objectType === 'list' && <List sendData={sendData} />}
-          {objectType === 'commerce' && <Commerce sendData={sendData} />}
+          {objectType === 'feed' && <Feed sendData={sendData as IFeedData} />}
+          {objectType === 'text' && <Text sendData={sendData as ITextData} />}
+          {objectType === 'location' && <Location sendData={sendData as ILocationData} />}
+          {objectType === 'list' && <List sendData={sendData as IListData} />}
+          {objectType === 'commerce' && <Commerce sendData={sendData as ICommerceData} />}
         </Wrapper>
       )}
+
+      {hasMissingData && <Wrapper>{[...missingData].map((value) => value)}</Wrapper>}
 
       <Footer
         file={file}
         fileRef={fileRef}
+        hasMissingData={hasMissingData}
         onFileChange={handleFileChange}
         onFileReset={handleFileReset}
         onSendMessage={handleSendMessage}

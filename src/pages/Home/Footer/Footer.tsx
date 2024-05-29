@@ -11,11 +11,13 @@ interface FooterParams {
   onFileReset: () => void;
   onSendMessage: () => void;
   onFileUpdate: () => void;
+  hasMissingData: boolean;
 }
 
 const Footer = ({
   file,
   fileRef,
+  hasMissingData,
   onFileChange,
   onFileReset,
   onSendMessage,
@@ -37,7 +39,9 @@ const Footer = ({
           <Button color="none" onClick={onFileReset} hasIcon>
             <Close />
           </Button>
-          <Button onClick={onSendMessage}>전송</Button>
+          <Button disabled={hasMissingData} onClick={onSendMessage}>
+            전송
+          </Button>
         </div>
       ) : (
         <Button onClick={onFileUpdate}>파일 선택</Button>
