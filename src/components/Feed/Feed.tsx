@@ -11,13 +11,6 @@ const Feed = ({ sendData }: { sendData: IFeedData }) => {
     buttons,
   } = sendData;
 
-  const hasButtons = !!buttons && buttons?.length > 0;
-
-  const normalButton = {
-    title: buttonTitle ?? '자세히 보기',
-    link,
-  };
-
   return (
     <>
       {imageUrl && (
@@ -30,7 +23,7 @@ const Feed = ({ sendData }: { sendData: IFeedData }) => {
         {title && <div className={styles.title}>{title}</div>}
         {description && <div className={styles.description}>{description}</div>}
         {/* social 추가해야함 */}
-        <ContentButtons buttons={hasButtons ? buttons : [normalButton]} />
+        <ContentButtons buttonTitle={buttonTitle} link={link} buttons={buttons} />
       </div>
     </>
   );

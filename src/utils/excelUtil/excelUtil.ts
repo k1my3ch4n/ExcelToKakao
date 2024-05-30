@@ -165,7 +165,6 @@ export const checkButtonsData = (record: ExcelRecord) => {
     });
   }
 
-  // todo : 기본 값으로 자세히보기를 추가할 수 있을까 ?
   if (!!buttonTitle) {
     buttonsData['buttonTitle'] = buttonTitle;
   }
