@@ -80,7 +80,7 @@ export const excelFileToRecords = async (excelFile: File) => {
   }
 };
 
-export const checkLinkData = ({
+const checkLinkData = ({
   record,
   missingData,
 }: {
@@ -111,7 +111,7 @@ export const checkLinkData = ({
   return linkData;
 };
 
-export const checkButtonsData = (record: ExcelRecord) => {
+const checkButtonsData = (record: ExcelRecord) => {
   const buttonsData: IButtonsData = {};
   const buttons: IButtonData[] = [];
 
@@ -176,7 +176,7 @@ export const checkButtonsData = (record: ExcelRecord) => {
   return buttonsData;
 };
 
-export const checkContentData = ({
+const checkContentData = ({
   record,
   missingData,
 }: {
@@ -214,7 +214,7 @@ export const checkContentData = ({
   return contentData;
 };
 
-export const checkCommerceData = ({
+const checkCommerceData = ({
   record,
   missingData,
 }: {
@@ -268,8 +268,8 @@ const checkItemData = ({ record, count }: { record: ExcelRecord; count: number }
   const itemData: IItems[] = [];
 
   for (var i = 1; i <= count; i++) {
-    const item = record[`item${count}`];
-    const itemOp = record[`item_op${count}`];
+    const item = record[`item${i}`];
+    const itemOp = record[`item_op${i}`];
 
     const hasItem = !!item && !!itemOp;
 
@@ -284,7 +284,55 @@ const checkItemData = ({ record, count }: { record: ExcelRecord; count: number }
   return itemData;
 };
 
-export const recordsToText = ({
+const checkContentsData = ({ record, count }: { record: ExcelRecord; count: number }) => {
+  // ? contents 값 확인
+  const contents = [];
+
+  for (var i = 1; i <= count; i++) {
+    const title = record[`content_title${i}`];
+    const description = record[`content_description${i}`];
+    const imageUrl = record[`content_image_url${i}`];
+    const webLink = record[`content_web_url${i}`];
+    const mobileWebLink = record[`content_mobile_web_url${i}`];
+
+    const hasLink = !!webLink || !!mobileWebLink;
+    const hasContentData = (!!title || !!description || !!imageUrl) && hasLink;
+
+    if (hasContentData) {
+      const linkData = {} as ILinkData;
+
+      if (webLink) {
+        linkData['webUrl'] = webLink;
+      }
+
+      if (mobileWebLink) {
+        linkData['mobileWebUrl'] = mobileWebLink;
+      }
+
+      const contentData = {
+        link: linkData,
+      } as IContentData;
+
+      if (!!title) {
+        contentData['title'] = title;
+      }
+
+      if (!!description) {
+        contentData['description'] = description;
+      }
+
+      if (!!imageUrl) {
+        contentData['imageUrl'] = imageUrl;
+      }
+
+      contents.push(contentData);
+    }
+  }
+
+  return contents;
+};
+
+const recordsToText = ({
   record,
   missingData,
 }: {
@@ -320,7 +368,7 @@ export const recordsToText = ({
   };
 };
 
-export const recordsToLocation = ({
+const recordsToLocation = ({
   record,
   missingData,
 }: {
@@ -361,7 +409,7 @@ export const recordsToLocation = ({
   };
 };
 
-export const recordsToFeed = ({
+const recordsToFeed = ({
   record,
   missingData,
 }: {
@@ -436,7 +484,7 @@ export const recordsToFeed = ({
   };
 };
 
-export const recordsToList = ({
+const recordsToList = ({
   record,
   missingData,
 }: {
@@ -456,127 +504,9 @@ export const recordsToList = ({
   const buttonsData = checkButtonsData(record);
 
   // ? contents 값 확인
-  const contents = [];
+  const contents = checkContentsData({ record, count: 3 });
 
-  const title1 = record['content_title1'];
-  const description1 = record['content_description1'];
-  const imageUrl1 = record['content_image_url1'];
-  const webLink1 = record['content_web_url1'];
-  const mobileWebLink1 = record['content_mobile_web_url1'];
-
-  const hasLink1 = !!webLink1 || !!mobileWebLink1;
-  const hasContentData1 = (!!title1 || !!description1 || !!imageUrl1) && hasLink1;
-
-  const title2 = record['content_title2'];
-  const description2 = record['content_description2'];
-  const imageUrl2 = record['content_image_url2'];
-  const webLink2 = record['content_web_url2'];
-  const mobileWebLink2 = record['content_mobile_web_url2'];
-
-  const hasLink2 = !!webLink2 || !!mobileWebLink2;
-  const hasContentData2 = (!!title2 || !!description2 || !!imageUrl2) && hasLink2;
-
-  const title3 = record['content_title3'];
-  const description3 = record['content_description3'];
-  const imageUrl3 = record['content_image_url3'];
-  const webLink3 = record['content_web_url3'];
-  const mobileWebLink3 = record['content_mobile_web_url3'];
-
-  const hasLink3 = !!webLink3 || !!mobileWebLink3;
-  const hasContentData3 = (!!title3 || !!description3 || !!imageUrl3) && hasLink3;
-
-  // todo : checkContentData 재사용 방안 고민
-  if (hasContentData1) {
-    const linkData = {} as ILinkData;
-
-    if (webLink1) {
-      linkData['webUrl'] = webLink1;
-    }
-
-    if (mobileWebLink1) {
-      linkData['mobileWebUrl'] = mobileWebLink1;
-    }
-
-    const contentData = {
-      link: linkData,
-    } as IContentData;
-
-    if (!!title1) {
-      contentData['title'] = title1;
-    }
-
-    if (!!description1) {
-      contentData['description'] = description1;
-    }
-
-    if (!!imageUrl1) {
-      contentData['imageUrl'] = imageUrl1;
-    }
-
-    contents.push(contentData);
-  }
-
-  if (hasContentData2) {
-    const linkData = {} as ILinkData;
-
-    if (webLink2) {
-      linkData['webUrl'] = webLink2;
-    }
-
-    if (mobileWebLink2) {
-      linkData['mobileWebUrl'] = mobileWebLink2;
-    }
-
-    const contentData = {
-      link: linkData,
-    } as IContentData;
-
-    if (!!title2) {
-      contentData['title'] = title2;
-    }
-
-    if (!!description2) {
-      contentData['description'] = description2;
-    }
-
-    if (!!imageUrl2) {
-      contentData['imageUrl'] = imageUrl2;
-    }
-
-    contents.push(contentData);
-  }
-
-  if (hasContentData3) {
-    const linkData = {} as ILinkData;
-
-    if (webLink3) {
-      linkData['webUrl'] = webLink3;
-    }
-
-    if (mobileWebLink3) {
-      linkData['mobileWebUrl'] = mobileWebLink3;
-    }
-
-    const contentData = {
-      link: linkData,
-    } as IContentData;
-
-    if (!!title3) {
-      contentData['title'] = title3;
-    }
-
-    if (!!description3) {
-      contentData['description'] = description3;
-    }
-
-    if (!!imageUrl3) {
-      contentData['imageUrl'] = imageUrl3;
-    }
-
-    contents.push(contentData);
-  }
-
-  if (!!headerTitle) {
+  if (!headerTitle) {
     missingData.add('headerTitle');
   }
 
@@ -598,7 +528,7 @@ export const recordsToList = ({
   };
 };
 
-export const recordsToCommerce = ({
+const recordsToCommerce = ({
   record,
   missingData,
 }: {
