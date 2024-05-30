@@ -36,7 +36,7 @@ const Home = () => {
 
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = () => {
     if (!sendData) {
       return;
     }

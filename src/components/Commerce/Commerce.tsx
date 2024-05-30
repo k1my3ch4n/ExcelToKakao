@@ -28,8 +28,6 @@ const Commerce = ({ sendData }: { sendData: ICommerceData }) => {
       <div className={styles.detail}>
         {productName && <p className={styles.title}>{productName}</p>}
 
-        {/* todo : price 분리 */}
-
         <div className={styles.price}>
           <p className={styles.finalPrice}>
             {(currencyUnitPosition === 1 && currencyUnit) ?? '원'}
@@ -49,7 +47,6 @@ const Commerce = ({ sendData }: { sendData: ICommerceData }) => {
 
         <div className={styles.line} />
         {title && <p className={styles.description}>{title}</p>}
-
         {!title && description && <p className={styles.description}>{description}</p>}
 
         <ContentButtons buttonTitle={buttonTitle} link={link} buttons={buttons} />
