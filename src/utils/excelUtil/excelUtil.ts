@@ -265,6 +265,26 @@ export const checkCommerceData = ({
   return commerceData;
 };
 
+const checkItemData = ({ record, count }: { record: ExcelRecord; count: number }) => {
+  const itemData: IItems[] = [];
+
+  for (var i = 1; i <= count; i++) {
+    const item = record[`item${count}`];
+    const itemOp = record[`item_op${count}`];
+
+    const hasItem = !!item && !!itemOp;
+
+    if (hasItem) {
+      itemData.push({
+        item,
+        itemOp,
+      });
+    }
+  }
+
+  return itemData;
+};
+
 export const recordsToText = ({
   record,
   missingData,
@@ -364,44 +384,7 @@ export const recordsToFeed = ({
   const titleImageUrl = record['title_image_url'];
   const titleImageCategory = record['title_image_category'];
 
-  // todo : 5개까지 존재할 수 있는데 , 일일히 해야하는 불편함이 있음. 이를 한번에 해결할 수 있는지 ?
-  const itemData: IItems[] = [];
-
-  const item1 = record['item1'];
-  const itemOp1 = record['item_op1'];
-
-  const hasItem1 = !!item1 && !!itemOp1;
-
-  if (hasItem1) {
-    itemData.push({
-      item: item1,
-      itemOp: itemOp1,
-    });
-  }
-
-  const item2 = record['item2'];
-  const itemOp2 = record['item_op2'];
-
-  const hasItem2 = !!item2 && !!itemOp2;
-
-  if (hasItem2) {
-    itemData.push({
-      item: item2,
-      itemOp: itemOp2,
-    });
-  }
-
-  const item3 = record['item3'];
-  const itemOp3 = record['item_op3'];
-
-  const hasItem3 = !!item3 && !!itemOp3;
-
-  if (hasItem3) {
-    itemData.push({
-      item: item3,
-      itemOp: itemOp3,
-    });
-  }
+  const itemData = checkItemData({ record, count: 5 });
 
   const sum = record['sum'];
   const sumOp = record['sum_op'];
