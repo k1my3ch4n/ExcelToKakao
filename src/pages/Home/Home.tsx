@@ -19,6 +19,7 @@ import {
   ITextData,
   MessageType,
 } from '@interface/excel';
+import MissingData from '@src/components/MissingData';
 
 export type FileChangeEvent = React.ChangeEvent<HTMLInputElement> & {
   target: EventTarget & { files: FileList };
@@ -92,7 +93,11 @@ const Home = () => {
         </Wrapper>
       )}
 
-      {hasMissingData && <Wrapper>{[...missingData].map((value) => value)}</Wrapper>}
+      {hasMissingData && (
+        <Wrapper>
+          <MissingData missingData={missingData} />
+        </Wrapper>
+      )}
 
       <Footer
         file={file}
