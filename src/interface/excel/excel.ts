@@ -1,5 +1,15 @@
 export type MessageType = 'feed' | 'list' | 'location' | 'commerce' | 'text' | 'calendar';
 
+export type MissingDataType =
+  | 'objectType'
+  | 'link'
+  | 'content'
+  | 'text'
+  | 'regularPrice'
+  | 'address'
+  | 'headerTitle'
+  | 'contents';
+
 export interface ILinkData {
   webUrl?: string;
   mobileWebUrl?: string;

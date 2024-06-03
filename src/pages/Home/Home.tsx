@@ -18,6 +18,7 @@ import {
   ILocationData,
   ITextData,
   MessageType,
+  MissingDataType,
 } from '@interface/excel';
 import MissingData from '@src/components/MissingData';
 
@@ -29,7 +30,7 @@ const kakao = (window as any).Kakao;
 
 const Home = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [missingData, setMissingData] = useState<Set<string>>();
+  const [missingData, setMissingData] = useState<Set<MissingDataType>>();
   const [objectType, setObjectType] = useState<MessageType | null>(null);
   const [sendData, setSendData] = useState<
     ITextData | ILocationData | IFeedData | IListData | ICommerce | null

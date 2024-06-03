@@ -12,6 +12,7 @@ import {
   ILocationData,
   ITextData,
   MessageType,
+  MissingDataType,
 } from '@interface/excel';
 import { read, Range, Sheet, utils } from 'xlsx';
 
@@ -85,7 +86,7 @@ const checkLinkData = ({
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   const linkData = {} as ILinkData;
 
@@ -181,7 +182,7 @@ const checkContentData = ({
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   const title = record['content_title'];
   const description = record['content_description'];
@@ -219,7 +220,7 @@ const checkCommerceData = ({
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   const productName = record['product_name']; // 필수 아님
   const regularPrice =
@@ -337,7 +338,7 @@ const recordsToText = ({
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   // ? objectType
   const objectType = record['objectType'] as MessageType;
@@ -373,7 +374,7 @@ const recordsToLocation = ({
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   // ? objectType
   const objectType = record['objectType'] as MessageType;
@@ -414,7 +415,7 @@ const recordsToFeed = ({
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   // ? objectType
   const objectType = record['objectType'] as MessageType;
@@ -489,7 +490,7 @@ const recordsToList = ({
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   // ? objectType
   const objectType = record['objectType'] as MessageType;
@@ -533,7 +534,7 @@ const recordsToCommerce = ({
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   // ? objectType
   const objectType = record['objectType'] as MessageType;
@@ -561,7 +562,7 @@ const recordsToCommerce = ({
 };
 
 export const recordsToSendData = (record: ExcelRecord) => {
-  const missingData = new Set<string>();
+  const missingData = new Set<MissingDataType>();
 
   const objectType = record['objectType'] as MessageType | null;
 
