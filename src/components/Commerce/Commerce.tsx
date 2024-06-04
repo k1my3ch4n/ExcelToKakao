@@ -18,13 +18,6 @@ const Commerce = ({ sendData }: { sendData: ICommerceData }) => {
     buttons,
   } = sendData;
 
-  const hasButtons = !!buttons && buttons?.length > 0;
-
-  const normalButton = {
-    title: buttonTitle ?? '자세히 보기',
-    link,
-  };
-
   return (
     <>
       {imageUrl && (
@@ -34,8 +27,6 @@ const Commerce = ({ sendData }: { sendData: ICommerceData }) => {
       )}
       <div className={styles.detail}>
         {productName && <p className={styles.title}>{productName}</p>}
-
-        {/* todo : price 분리 */}
 
         <div className={styles.price}>
           <p className={styles.finalPrice}>
@@ -56,10 +47,9 @@ const Commerce = ({ sendData }: { sendData: ICommerceData }) => {
 
         <div className={styles.line} />
         {title && <p className={styles.description}>{title}</p>}
-
         {!title && description && <p className={styles.description}>{description}</p>}
 
-        <ContentButtons buttons={hasButtons ? buttons : [normalButton]} />
+        <ContentButtons buttonTitle={buttonTitle} link={link} buttons={buttons} />
       </div>
     </>
   );

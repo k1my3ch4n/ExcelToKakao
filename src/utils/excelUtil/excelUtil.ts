@@ -12,6 +12,7 @@ import {
   ILocationData,
   ITextData,
   MessageType,
+  MissingDataType,
 } from '@interface/excel';
 import { read, Range, Sheet, utils } from 'xlsx';
 
@@ -80,12 +81,12 @@ export const excelFileToRecords = async (excelFile: File) => {
   }
 };
 
-export const checkLinkData = ({
+const checkLinkData = ({
   record,
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   const linkData = {} as ILinkData;
 
@@ -111,7 +112,7 @@ export const checkLinkData = ({
   return linkData;
 };
 
-export const checkButtonsData = (record: ExcelRecord) => {
+const checkButtonsData = (record: ExcelRecord) => {
   const buttonsData: IButtonsData = {};
   const buttons: IButtonData[] = [];
 
@@ -165,7 +166,6 @@ export const checkButtonsData = (record: ExcelRecord) => {
     });
   }
 
-  // todo : 기본 값으로 자세히보기를 추가할 수 있을까 ?
   if (!!buttonTitle) {
     buttonsData['buttonTitle'] = buttonTitle;
   }
@@ -177,12 +177,12 @@ export const checkButtonsData = (record: ExcelRecord) => {
   return buttonsData;
 };
 
-export const checkContentData = ({
+const checkContentData = ({
   record,
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   const title = record['content_title'];
   const description = record['content_description'];
@@ -215,12 +215,12 @@ export const checkContentData = ({
   return contentData;
 };
 
-export const checkCommerceData = ({
+const checkCommerceData = ({
   record,
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   const productName = record['product_name']; // 필수 아님
   const regularPrice =
@@ -265,12 +265,80 @@ export const checkCommerceData = ({
   return commerceData;
 };
 
-export const recordsToText = ({
+const checkItemData = ({ record, count }: { record: ExcelRecord; count: number }) => {
+  const itemData: IItems[] = [];
+
+  for (var i = 1; i <= count; i++) {
+    const item = record[`item${i}`];
+    const itemOp = record[`item_op${i}`];
+
+    const hasItem = !!item && !!itemOp;
+
+    if (hasItem) {
+      itemData.push({
+        item,
+        itemOp,
+      });
+    }
+  }
+
+  return itemData;
+};
+
+const checkContentsData = ({ record, count }: { record: ExcelRecord; count: number }) => {
+  // ? contents 값 확인
+  const contents = [];
+
+  for (var i = 1; i <= count; i++) {
+    const title = record[`content_title${i}`];
+    const description = record[`content_description${i}`];
+    const imageUrl = record[`content_image_url${i}`];
+    const webLink = record[`content_web_url${i}`];
+    const mobileWebLink = record[`content_mobile_web_url${i}`];
+
+    const hasLink = !!webLink || !!mobileWebLink;
+    const hasContentData = (!!title || !!description || !!imageUrl) && hasLink;
+
+    if (hasContentData) {
+      const linkData = {} as ILinkData;
+
+      if (webLink) {
+        linkData['webUrl'] = webLink;
+      }
+
+      if (mobileWebLink) {
+        linkData['mobileWebUrl'] = mobileWebLink;
+      }
+
+      const contentData = {
+        link: linkData,
+      } as IContentData;
+
+      if (!!title) {
+        contentData['title'] = title;
+      }
+
+      if (!!description) {
+        contentData['description'] = description;
+      }
+
+      if (!!imageUrl) {
+        contentData['imageUrl'] = imageUrl;
+      }
+
+      contents.push(contentData);
+    }
+  }
+
+  return contents;
+};
+
+const recordsToText = ({
   record,
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   // ? objectType
   const objectType = record['objectType'] as MessageType;
@@ -301,12 +369,12 @@ export const recordsToText = ({
   };
 };
 
-export const recordsToLocation = ({
+const recordsToLocation = ({
   record,
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   // ? objectType
   const objectType = record['objectType'] as MessageType;
@@ -342,12 +410,12 @@ export const recordsToLocation = ({
   };
 };
 
-export const recordsToFeed = ({
+const recordsToFeed = ({
   record,
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   // ? objectType
   const objectType = record['objectType'] as MessageType;
@@ -364,44 +432,7 @@ export const recordsToFeed = ({
   const titleImageUrl = record['title_image_url'];
   const titleImageCategory = record['title_image_category'];
 
-  // todo : 5개까지 존재할 수 있는데 , 일일히 해야하는 불편함이 있음. 이를 한번에 해결할 수 있는지 ?
-  const itemData: IItems[] = [];
-
-  const item1 = record['item1'];
-  const itemOp1 = record['item_op1'];
-
-  const hasItem1 = !!item1 && !!itemOp1;
-
-  if (hasItem1) {
-    itemData.push({
-      item: item1,
-      itemOp: itemOp1,
-    });
-  }
-
-  const item2 = record['item2'];
-  const itemOp2 = record['item_op2'];
-
-  const hasItem2 = !!item2 && !!itemOp2;
-
-  if (hasItem2) {
-    itemData.push({
-      item: item2,
-      itemOp: itemOp2,
-    });
-  }
-
-  const item3 = record['item3'];
-  const itemOp3 = record['item_op3'];
-
-  const hasItem3 = !!item3 && !!itemOp3;
-
-  if (hasItem3) {
-    itemData.push({
-      item: item3,
-      itemOp: itemOp3,
-    });
-  }
+  const itemData = checkItemData({ record, count: 5 });
 
   const sum = record['sum'];
   const sumOp = record['sum_op'];
@@ -454,12 +485,12 @@ export const recordsToFeed = ({
   };
 };
 
-export const recordsToList = ({
+const recordsToList = ({
   record,
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   // ? objectType
   const objectType = record['objectType'] as MessageType;
@@ -474,127 +505,9 @@ export const recordsToList = ({
   const buttonsData = checkButtonsData(record);
 
   // ? contents 값 확인
-  const contents = [];
+  const contents = checkContentsData({ record, count: 3 });
 
-  const title1 = record['content_title1'];
-  const description1 = record['content_description1'];
-  const imageUrl1 = record['content_image_url1'];
-  const webLink1 = record['content_web_url1'];
-  const mobileWebLink1 = record['content_mobile_web_url1'];
-
-  const hasLink1 = !!webLink1 || !!mobileWebLink1;
-  const hasContentData1 = (!!title1 || !!description1 || !!imageUrl1) && hasLink1;
-
-  const title2 = record['content_title2'];
-  const description2 = record['content_description2'];
-  const imageUrl2 = record['content_image_url2'];
-  const webLink2 = record['content_web_url2'];
-  const mobileWebLink2 = record['content_mobile_web_url2'];
-
-  const hasLink2 = !!webLink2 || !!mobileWebLink2;
-  const hasContentData2 = (!!title2 || !!description2 || !!imageUrl2) && hasLink2;
-
-  const title3 = record['content_title3'];
-  const description3 = record['content_description3'];
-  const imageUrl3 = record['content_image_url3'];
-  const webLink3 = record['content_web_url3'];
-  const mobileWebLink3 = record['content_mobile_web_url3'];
-
-  const hasLink3 = !!webLink3 || !!mobileWebLink3;
-  const hasContentData3 = (!!title3 || !!description3 || !!imageUrl3) && hasLink3;
-
-  // todo : checkContentData 재사용 방안 고민
-  if (hasContentData1) {
-    const linkData = {} as ILinkData;
-
-    if (webLink1) {
-      linkData['webUrl'] = webLink1;
-    }
-
-    if (mobileWebLink1) {
-      linkData['mobileWebUrl'] = mobileWebLink1;
-    }
-
-    const contentData = {
-      link: linkData,
-    } as IContentData;
-
-    if (!!title1) {
-      contentData['title'] = title1;
-    }
-
-    if (!!description1) {
-      contentData['description'] = description1;
-    }
-
-    if (!!imageUrl1) {
-      contentData['imageUrl'] = imageUrl1;
-    }
-
-    contents.push(contentData);
-  }
-
-  if (hasContentData2) {
-    const linkData = {} as ILinkData;
-
-    if (webLink2) {
-      linkData['webUrl'] = webLink2;
-    }
-
-    if (mobileWebLink2) {
-      linkData['mobileWebUrl'] = mobileWebLink2;
-    }
-
-    const contentData = {
-      link: linkData,
-    } as IContentData;
-
-    if (!!title2) {
-      contentData['title'] = title2;
-    }
-
-    if (!!description2) {
-      contentData['description'] = description2;
-    }
-
-    if (!!imageUrl2) {
-      contentData['imageUrl'] = imageUrl2;
-    }
-
-    contents.push(contentData);
-  }
-
-  if (hasContentData3) {
-    const linkData = {} as ILinkData;
-
-    if (webLink3) {
-      linkData['webUrl'] = webLink3;
-    }
-
-    if (mobileWebLink3) {
-      linkData['mobileWebUrl'] = mobileWebLink3;
-    }
-
-    const contentData = {
-      link: linkData,
-    } as IContentData;
-
-    if (!!title3) {
-      contentData['title'] = title3;
-    }
-
-    if (!!description3) {
-      contentData['description'] = description3;
-    }
-
-    if (!!imageUrl3) {
-      contentData['imageUrl'] = imageUrl3;
-    }
-
-    contents.push(contentData);
-  }
-
-  if (!!headerTitle) {
+  if (!headerTitle) {
     missingData.add('headerTitle');
   }
 
@@ -616,12 +529,12 @@ export const recordsToList = ({
   };
 };
 
-export const recordsToCommerce = ({
+const recordsToCommerce = ({
   record,
   missingData,
 }: {
   record: ExcelRecord;
-  missingData: Set<string>;
+  missingData: Set<MissingDataType>;
 }) => {
   // ? objectType
   const objectType = record['objectType'] as MessageType;
@@ -649,7 +562,7 @@ export const recordsToCommerce = ({
 };
 
 export const recordsToSendData = (record: ExcelRecord) => {
-  const missingData = new Set<string>();
+  const missingData = new Set<MissingDataType>();
 
   const objectType = record['objectType'] as MessageType | null;
 

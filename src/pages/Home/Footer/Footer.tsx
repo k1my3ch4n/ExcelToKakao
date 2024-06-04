@@ -2,7 +2,7 @@ import Button from '@components/Button';
 import styles from './Footer.module.scss';
 import { Close } from '@images/index';
 import { RefObject } from 'react';
-import { FileChangeEvent } from '../Home';
+import { FileChangeEvent } from '@hooks/useExcelFile';
 
 interface FooterParams {
   file: File | null;
