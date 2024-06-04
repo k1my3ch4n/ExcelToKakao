@@ -1,4 +1,4 @@
-import { MissingDataType } from '@src/interface/excel';
+import { MissingDataType } from '@interface/excel';
 import styles from './MissingData.module.scss';
 
 const MISSING_DATA_MESSAGE: Record<MissingDataType, string> = {
