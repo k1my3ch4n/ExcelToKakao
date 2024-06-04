@@ -1,8 +1,8 @@
 import { MissingDataType } from '@src/interface/excel';
 import styles from './MissingData.module.scss';
 
-const data: Record<MissingDataType, string> = {
-  objectType: 'objectType 이 유효하지 않습니다.',
+const MISSING_DATA_MESSAGE: Record<MissingDataType, string> = {
+  objectType: 'objectType 이 없거나 유효하지 않습니다.',
   text: 'content_text 값이 존재하지 않습니다.',
   link: '"content_web_url" 또는 "content_mobile_web_url" 중 1개는 필수값 입니다.',
   content:
@@ -20,8 +20,12 @@ const MissingData = ({ missingData }: { missingData: Set<MissingDataType> }) => 
 
   return (
     <div className={styles.wrapper}>
-      {[...missingData].map((value) => {
-        return <p>{data[value]}</p>;
+      {[...missingData].map((value, index) => {
+        return (
+          <p key={index} className={styles.message}>
+            {index + 1} : {MISSING_DATA_MESSAGE[value]}
+          </p>
+        );
       })}
     </div>
   );

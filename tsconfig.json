@@ -23,11 +23,12 @@
     "baseUrl": ".",
     "paths": {
       "@src/*": ["./src/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@components/*": ["./src/components/*"],
-      "@interface/*": ["./src/interface/*"],
+      "@hooks/*": ["./src/hooks/*"],
       "@pages/*": ["./src/pages/*"],
-      "@images/*": ["./src/assets/images/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@interface/*": ["./src/interface/*"],
+      "@images/*": ["./src/assets/images/*"],
+      "@components/*": ["./src/components/*"]
     }
   },
   "include": ["src", "vite.config.ts"],
